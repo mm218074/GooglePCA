@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GCP PCA Study Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6;font-size:15px}
+.header{background:#1a73e8;color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.header h1{font-size:16px;font-weight:600}
+.q-counter{font-size:13px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px}
+.progress-bar{height:3px;background:rgba(255,255,255,.3);border-radius:2px}
+.progress-fill{height:3px;background:#fff;border-radius:2px;transition:width .3s}
+.sec-nav{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;background:#fff;border-bottom:1px solid #e0e0e0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sec-nav::-webkit-scrollbar{display:none}
+.sec-pill{padding:6px 14px;border-radius:20px;border:1.5px solid #d0d0d0;font-size:13px;font-weight:500;color:#666;cursor:pointer;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0}
+.sec-pill.active{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
+.main{padding:14px;max-width:680px;margin:0 auto}
+.q-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.1);margin-bottom:10px}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.q-num{font-size:12px;font-weight:700;color:#1a73e8;text-transform:uppercase;letter-spacing:.5px}
+.multi-badge{font-size:11px;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;padding:2px 8px;border-radius:10px;font-weight:500}
+.q-text{font-size:15px;color:#1a1a2e;line-height:1.7;margin-bottom:18px}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;background:#fafafa}
+.option.correct{border-color:#2e7d32;background:#f1f8f1}
+.option.wrong{border-color:#c62828;background:#fff8f8}
+.opt-letter{width:26px;height:26px;min-width:26px;border-radius:50%;background:#e8eaf6;color:#3949ab;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
+.option.correct .opt-letter{background:#2e7d32;color:#fff}
+.option.wrong .opt-letter{background:#c62828;color:#fff}
+.opt-text{font-size:14px;color:#333;line-height:1.5}
+.option.correct .opt-text{color:#1b5e20;font-weight:500}
+.option.wrong .opt-text{color:#7f0000}
+.reveal-btn{width:100%;padding:12px;margin-top:16px;border-radius:10px;border:2px solid #1a73e8;background:#fff;color:#1a73e8;font-size:15px;font-weight:600;cursor:pointer}
+.answer-section{display:none;margin-top:14px}
+.answer-section.visible{display:block}
+.correct-badge{display:inline-flex;align-items:center;gap:6px;background:#2e7d32;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:14px}
+.exp-block{background:#f8f9ff;border-left:4px solid #1a73e8;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px}
+.exp-title{font-size:11px;font-weight:700;color:#1a73e8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.exp-text{font-size:14px;color:#333;line-height:1.7;white-space:pre-line}
+.why-block{background:#fff8f8;border-left:4px solid #b71c1c;border-radius:0 10px 10px 0;padding:14px 16px}
+.why-title{font-size:11px;font-weight:700;color:#b71c1c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.why-text{font-size:14px;color:#444;line-height:1.7;white-space:pre-line}
+.nav-row{display:flex;gap:10px;margin-top:10px;padding-bottom:28px}
+.nav-btn{flex:1;padding:11px;border-radius:10px;border:1.5px solid #d0d0d0;background:#fff;color:#444;font-size:14px;font-weight:500;cursor:pointer}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn.next-btn{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.loading{text-align:center;padding:40px;color:#888;font-size:15px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <h1>GCP Professional Cloud Architect</h1>
+    <span class="q-counter" id="qCounter">— / —</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+<nav class="sec-nav" id="secNav"></nav>
+<div class="main" id="main"><div class="loading">Cargando preguntas...</div></div>
+<script>
+// Para agregar nueva seccion: añade objeto a SECTIONS y crea data/tu-archivo.json
+const SECTIONS=[
+  {id:'q1-20',label:'Q 1–20',file:'data/q1-20.json'},
+  {id:'q21-40',label:'Q 21–40',file:'data/q21-40.json'},
+  {id:'q41-60',label:'Q 41–60',file:'data/q41-60.json'},
+  {id:'q61-80',label:'Q 61–80',file:'data/q61-80.json'},
+  {id:'q81-100',label:'Q 81–100',file:'data/q81-100.json'},
+];
+let allData={},currentSection=SECTIONS[0].id,currentIndex=0;
+async function loadAll(){
+  const results=await Promise.all(SECTIONS.map(s=>fetch(s.file).then(r=>r.json()).then(d=>({id:s.id,questions:d.questions}))));
+  results.forEach(r=>{allData[r.id]=r.questions;});
+  renderNav();showSection(SECTIONS[0].id);
+}
+function renderNav(){
+  document.getElementById('secNav').innerHTML=SECTIONS.map(s=>
+    `<button class="sec-pill${s.id===currentSection?' active':''}" onclick="showSection('${s.id}')">${s.label}</button>`
+  ).join('');
+}
+function showSection(id){currentSection=id;currentIndex=0;renderNav();renderQ();}
+function renderQ(){
+  const qs=allData[currentSection],q=qs[currentIndex],total=qs.length;
+  document.getElementById('qCounter').textContent=`Q${q.id} · ${currentIndex+1}/${total}`;
+  document.getElementById('progressFill').style.width=(((currentIndex+1)/total)*100)+'%';
+  const isMulti=q.correct.length>1;
+  document.getElementById('main').innerHTML=`
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-num">Pregunta ${q.id}</span>
+        ${isMulti?`<span class="multi-badge">Selecciona ${q.correct.length}</span>`:''}
+      </div>
+      <div class="q-text">${q.question}</div>
+      <div class="options">${q.options.map(o=>`<div class="option" id="opt-${o.letter}"><div class="opt-letter">${o.letter}</div><div class="opt-text">${o.text}</div></div>`).join('')}</div>
+      <button class="reveal-btn" onclick="reveal()">Mostrar Respuesta</button>
+      <div class="answer-section" id="ans">
+        <div class="correct-badge">✓ Respuesta correcta: ${q.correct.join(', ')}</div>
+        <div class="exp-block"><div class="exp-title">Análisis detallado</div><div class="exp-text">${q.explanation}</div></div>
+        <div class="why-block"><div class="why-title">Por qué las otras opciones son incorrectas</div><div class="why-text">${q.wrongOptions}</div></div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn" onclick="go(-1)"${currentIndex===0?' disabled':''}>← Anterior</button>
+      <button class="nav-btn next-btn" onclick="go(1)"${currentIndex===total-1?' disabled':''}>Siguiente →</button>
+    </div>`;
+}
+function reveal(){
+  const q=allData[currentSection][currentIndex];
+  q.options.forEach(o=>{
+    document.getElementById('opt-'+o.letter).classList.add(q.correct.includes(o.letter)?'correct':'wrong');
+  });
+  document.querySelector('.reveal-btn').style.display='none';
+  document.getElementById('ans').classList.add('visible');
+}
+function go(dir){
+  const n=currentIndex+dir,qs=allData[currentSection];
+  if(n>=0&&n<qs.length){currentIndex=n;renderQ();window.scrollTo(0,0);}
+}
+loadAll().catch(()=>{document.getElementById('main').innerHTML='<div class="loading">Error cargando datos. Asegúrate de servir desde un servidor HTTP (GitHub Pages).</div>';});
+</script>
+</body>
+</html>
