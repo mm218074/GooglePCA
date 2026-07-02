@@ -1,0 +1,558 @@
+{
+  "questions": [
+    {
+      "id": 21,
+      "correct": [
+        "A",
+        "D"
+      ],
+      "question": "A major department store chain has developed a data pipeline to ingest sales data from both physical stores and their website. The data scientist team recently trained a sales forecast model and deployed it into production. Over time, the model's performance has degraded. As a machine learning consultant, you need to help design a solution in Google Cloud to address the model performance issue. How would you implement a solution in Google Cloud? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deploy the model to AI Platform and set up a continuous evaluation job to detect model performance issues, then retrain the model."
+        },
+        {
+          "letter": "B",
+          "text": "Deploy the model to AI Platform and set up a model monitoring job to alert on performance issues, then retrain the model."
+        },
+        {
+          "letter": "C",
+          "text": "Deploy the model to Vertex AI and set up a continuous evaluation job to alert on model performance issues, then retrain the model."
+        },
+        {
+          "letter": "D",
+          "text": "Deploy the model to Vertex AI and set up a model monitoring job to alert on data skew or data drift issues, then retrain the model."
+        }
+      ],
+      "explanation": "Model performance degradation (or \"model decay\") typically results from changes in the relationship between input data and target variables.\n\nOption A (AI Platform - Legacy): For older deployments, continuous evaluation is the specific feature used to compare model predictions against real-world \"ground truth\" data to measure accuracy over time.\n\nOption D (Vertex AI - Modern): In the current Vertex AI ecosystem, the service is known as Vertex AI Model Monitoring. It is specifically engineered to detect data skew (training vs. production differences) and data drift (shifts in production data over time).",
+      "wrongOptions": "Option B: While AI Platform has monitoring features, performance issues tied to ground truth specifically require continuous evaluation. Model monitoring in this context is usually reserved for skew and drift detection.\n\nOption C: This is a terminology mismatch. Vertex AI utilizes the \"Vertex AI Model Monitoring\" naming convention; \"continuous evaluation\" is the specific nomenclature for the legacy AI Platform."
+    },
+    {
+      "id": 22,
+      "correct": [
+        "A"
+      ],
+      "question": "Your team is about to deploy new infrastructure for a client who has asked you to restrict the team to only the us-central1 region. How can you fulfill the given requirement for all the projects in the organization?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Organization Policy Constraints"
+        },
+        {
+          "letter": "B",
+          "text": "Restrict regions in projects"
+        },
+        {
+          "letter": "C",
+          "text": "Custom IAM policy"
+        },
+        {
+          "letter": "D",
+          "text": "There is no such feature available in Google Cloud"
+        }
+      ],
+      "explanation": "Enforcing regional restrictions across an entire organization requires a \"guardrail\" approach rather than a \"permission\" approach.\n\nOrganization Policy Constraints allow an architect to set global restrictions. Specifically, the gcp.resourceLocations constraint is the tool required to define a list of approved regions. By applying this at the Organization level, it acts as a mandatory inheritance for all current and future projects.",
+      "wrongOptions": "Option B: Not scalable — manual project-level restrictions are prone to human error and do not prevent the creation of new projects with non-compliant settings.\n\nOption C: Identity and Access Management (IAM) defines who can perform an action, but it does not naturally restrict where (the location) that action can happen at scale.\n\nOption D: Factually incorrect — Google Cloud provides robust governance tools for compliance."
+    },
+    {
+      "id": 23,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company has successfully migrated to the cloud and wants to analyze their data stream to optimize operations. They do not have any existing code for this analysis. They are exploring options that include a mix of batch and stream processing, as they are running some hourly jobs and live processing some data as it comes in. Which technology should they use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google Cloud Dataproc"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud Dataflow"
+        },
+        {
+          "letter": "C",
+          "text": "Google Kubernetes Engine with Cloud Bigtable"
+        },
+        {
+          "letter": "D",
+          "text": "Google Compute Engine with Google BigQuery"
+        }
+      ],
+      "explanation": "The core requirement is a \"unified\" processing model that handles both batch processing (hourly jobs) and stream processing (live data) with minimal complexity.\n\nCloud Dataflow is the correct choice because it is a serverless service based on the Apache Beam SDK. Apache Beam provides a unified programming model, allowing developers to write code once and apply it to both batch and streaming pipelines.",
+      "wrongOptions": "Option A (Cloud Dataproc): Excellent for Apache Spark and Hadoop, but lacks the same level of seamless abstraction for a unified batch/stream model compared to Dataflow, and is often used for migrating legacy big data workloads.\n\nOptions C and D: These are \"building blocks\" rather than managed processing frameworks. Using Compute Engine or GKE for this task would introduce significant operational overhead and require the company to build their own processing logic from scratch."
+    },
+    {
+      "id": 24,
+      "correct": [
+        "A"
+      ],
+      "question": "You have installed a system update on a group of Google Shielded VMs that have hosted your application for the last 3 weeks. Before rebooting the VMs, what step should you take to ensure that the VM security features operate correctly?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Update the integrity policy baseline"
+        },
+        {
+          "letter": "B",
+          "text": "Disable the secure boot feature"
+        },
+        {
+          "letter": "C",
+          "text": "Back up the secure memory boot logs"
+        },
+        {
+          "letter": "D",
+          "text": "Rotate your encryption and signing keys"
+        }
+      ],
+      "explanation": "Shielded VMs provide integrity monitoring to detect if a VM has been compromised at the boot or kernel level.\n\nThe Integrity Policy Baseline is a \"known good\" snapshot of the boot sequence. When you perform a legitimate system update, the underlying system files change. If you reboot without updating the baseline, the integrity monitoring system will compare the new (updated) state against the old baseline, fail the check, and trigger a security alert.\n\nYou must update the integrity policy baseline to tell Google Cloud that the current modified state is the new trusted reference.",
+      "wrongOptions": "Option B: Disabling secure boot removes the security benefit of using Shielded VMs entirely.\n\nOption C: Backing up boot logs is a good general practice but does not interact with the integrity monitoring mechanism used to verify boot sequences.\n\nOption D: Rotating encryption and signing keys is a good security practice but does not address the integrity monitoring baseline issue."
+    },
+    {
+      "id": 25,
+      "correct": [
+        "C"
+      ],
+      "question": "Your customer is receiving reports that their recently updated Google App Engine application is taking approximately 30 seconds to load for some of their users. This behavior was not reported before the update. What strategy should you take?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Work with your ISP to diagnose the problem."
+        },
+        {
+          "letter": "B",
+          "text": "Open a support ticket to ask for network capture and flow data to diagnose the problem, then roll back your application."
+        },
+        {
+          "letter": "C",
+          "text": "Roll back to an earlier known good release initially, then use Cloud Trace and Cloud Logging to diagnose the problem in a development/test/staging environment."
+        },
+        {
+          "letter": "D",
+          "text": "Roll back to an earlier known good release, then push the release again at a quieter period to investigate, then use Cloud Trace and Cloud Logging to diagnose the problem."
+        }
+      ],
+      "explanation": "As a Senior Cloud Architect, your priority during an incident is Restore Service First.\n\n1. Restore Service (Roll Back): Immediately return to a known good version to eliminate user impact.\n2. Diagnose: Utilize Cloud Trace to identify latency bottlenecks and Cloud Logging to check for application-level errors.\n3. Isolate: Always perform a diagnosis in a non-production environment (Dev/Test/Staging).",
+      "wrongOptions": "Option A: Working with your ISP is incorrect because the problem started after a code update — this is an application-level issue, not a network issue.\n\nOption B: Opening a support ticket delays service restoration. The first priority should be to roll back.\n\nOption D: You should never redeploy 'bad' code to production for testing, even during 'quiet periods.' This violates the fundamental goal of maintaining high SLA and service stability."
+    },
+    {
+      "id": 26,
+      "correct": [
+        "A"
+      ],
+      "question": "What is Google Cloud Armor?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "A DDoS defense service and Web Application Firewall (WAF)"
+        },
+        {
+          "letter": "B",
+          "text": "A permissions management system for Google Cloud resources"
+        },
+        {
+          "letter": "C",
+          "text": "An encryption key management service"
+        },
+        {
+          "letter": "D",
+          "text": "A service for storing API keys, passwords, certificates, and other sensitive data"
+        }
+      ],
+      "explanation": "Cloud Armor is the primary edge security service for applications behind a Global External HTTP(S) Load Balancer.\n\nDDoS Defense: It protects against Distributed Denial of Service attacks at layers 3, 4, and 7.\n\nWAF: It allows architects to create security policies to block common web attacks like SQL Injection and Cross-Site Scripting (XSS).",
+      "wrongOptions": "Option B: This describes Identity and Access Management (IAM).\n\nOption C: This describes Cloud Key Management Service (Cloud KMS).\n\nOption D: This describes Secret Manager."
+    },
+    {
+      "id": 27,
+      "correct": [
+        "A"
+      ],
+      "question": "A production database virtual machine on Google Compute Engine has an ext4 formatted Persistent Disk for data files. The database is about to run out of storage space. How can you remediate the problem with the least amount of downtime?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "In the Google Cloud console, increase the size of the Persistent Disk and use the resize2fs command in Linux."
+        },
+        {
+          "letter": "B",
+          "text": "Shut down the virtual machine, use the console to increase the disk size, then restart the virtual machine."
+        },
+        {
+          "letter": "C",
+          "text": "In the console, increase the size of the disk and verify the new space is ready to use with the df command in Linux."
+        },
+        {
+          "letter": "D",
+          "text": "In the console, create a new disk, attach it, format it, and move the files."
+        },
+        {
+          "letter": "E",
+          "text": "In the console, create a snapshot, restore it to a larger disk, unmount the old disk, and mount the new one."
+        }
+      ],
+      "explanation": "Google Cloud supports the dynamic resizing of Persistent Disks while the virtual machine is running, making it a \"least downtime\" operation.\n\nThe Two-Step Process:\n1. Block Device Expansion: Increase the size of the Persistent Disk in the Cloud Console.\n2. File System Expansion: Use the resize2fs command within the Linux guest OS to expand the ext4 file system into the newly available space on the block device.",
+      "wrongOptions": "Option B: Involves shutting down the VM, causing unnecessary downtime.\n\nOption C: Simply running df (disk free) verifies the current state but does not actually expand the file system to use the new capacity.\n\nOption D: Involves creating a new disk and moving files, causing significant downtime.\n\nOption E: Involves restoring from a snapshot, causing significant downtime."
+    },
+    {
+      "id": 28,
+      "correct": [
+        "A"
+      ],
+      "question": "Your application needs to process credit card transactions. You want the smallest scope of Payment Card Industry (PCI) compliance without compromising the ability to analyze transactional data and trends relating to which payment methods are used. How should you design your architecture?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a tokenizer service and store only tokenized data."
+        },
+        {
+          "letter": "B",
+          "text": "Create separate projects that only process credit card data."
+        },
+        {
+          "letter": "C",
+          "text": "Create separate subnetworks and isolate components that process credit card data."
+        },
+        {
+          "letter": "D",
+          "text": "Streamline the audit discovery phase by labeling all virtual machines that process PCI data."
+        },
+        {
+          "letter": "E",
+          "text": "Enable logging export to Google BigQuery and use ACLs and views to scope data shared with the auditor."
+        }
+      ],
+      "explanation": "The primary goal in PCI compliance is to reduce the \"compliance scope\" — the number of systems that touch raw credit card data.\n\nBy utilizing a tokenizer service, the sensitive card data is replaced with a non-sensitive token. Since the main application only handles the token, it is removed from the strictest compliance requirements. You can still link the token to non-sensitive metadata (like the card type) for trend analysis without ever storing the actual credit card number.",
+      "wrongOptions": "Options B and C: These provide isolation, but the isolated systems would still be in the full scope of PCI audits. Option A is the only choice that fundamentally alters the data handling to minimize the compliance burden.\n\nOption D: Labeling VMs helps with auditing but does not reduce the compliance scope.\n\nOption E: Logging export helps auditors but does not reduce the number of systems that handle raw card data."
+    },
+    {
+      "id": 29,
+      "correct": [
+        "B"
+      ],
+      "question": "________ allows you to use a simple YAML configuration file to define how all your containers interact with each other and with external network connections.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Config Management"
+        },
+        {
+          "letter": "B",
+          "text": "Anthos Service Mesh"
+        },
+        {
+          "letter": "C",
+          "text": "Cloud Run"
+        },
+        {
+          "letter": "D",
+          "text": "Anthos on Bare Metal"
+        }
+      ],
+      "explanation": "A \"service mesh\" is a dedicated infrastructure layer for managing service-to-service communication, often referred to as \"east-west\" traffic.\n\nAnthos Service Mesh (ASM): Based on Istio, it uses YAML configuration (specifically Istio's custom resources) to manage routing and load balancing, security policies (Mutual TLS, Authentication/Authorization), observability, and traffic splitting.",
+      "wrongOptions": "Option A (Config Management): Focuses on cluster-level policies and configurations, not the interaction rules between individual containers.\n\nOption C (Cloud Run): A serverless platform that abstracts most networking, but it does not use the specific YAML interaction logic described for complex container-to-container meshes.\n\nOption D (Anthos on Bare Metal): A deployment environment, not a communication management service."
+    },
+    {
+      "id": 30,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company has decided to ingest clickstream data from their website for future analysis. They expect a high velocity of data, up to 8,500 clicks per second. Which storage infrastructure should they use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google Cloud SQL"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud Bigtable"
+        },
+        {
+          "letter": "C",
+          "text": "Google Cloud Storage"
+        },
+        {
+          "letter": "D",
+          "text": "Google Cloud Datastore"
+        }
+      ],
+      "explanation": "8,500 clicks per second is a high-velocity stream requiring a database that can ingest data without becoming a bottleneck.\n\nCloud Bigtable is a high-performance NoSQL database specifically designed for large-scale analytical workloads and extreme write throughput. It is the industry standard for clickstream, IoT, and time-series data.\n\nExam Tip: Whenever you see a high-velocity requirement (measured in thousands per second) for future analysis, Cloud Bigtable is almost always the target solution.",
+      "wrongOptions": "Option A (Cloud SQL): A relational (OLTP) database that would struggle to maintain performance at 8,500 writes per second.\n\nOption C (Cloud Storage): Object storage that is inefficient for real-time ingestion of thousands of small, individual records.\n\nOption D (Cloud Datastore): Designed for transactional web/mobile applications, not for high-throughput analytical ingestion."
+    },
+    {
+      "id": 31,
+      "correct": [
+        "B"
+      ],
+      "question": "You are creating a solution to remove backup files older than 90 days from your backup Cloud Storage bucket. You want to optimize ongoing Cloud Storage spend. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Write a lifecycle management rule in XML and push it to the bucket with gsutil."
+        },
+        {
+          "letter": "B",
+          "text": "Write a lifecycle management rule in JSON and push it to the bucket with gsutil."
+        },
+        {
+          "letter": "C",
+          "text": "Schedule a cron script using gsutil ls to find and remove items older than 90 days."
+        },
+        {
+          "letter": "D",
+          "text": "Schedule a cron script using gsutil rm to find and remove items older than 90 days and schedule it with cron."
+        }
+      ],
+      "explanation": "To optimize costs, you should use the native Object Lifecycle Management features of Cloud Storage rather than custom scripts.\n\nJSON is the modern, recommended, and standard format for defining lifecycle rules via gsutil. Native lifecycle management is serverless and automatic, whereas options C and D require managing an external server and cron jobs.",
+      "wrongOptions": "Option A: While XML was supported in legacy contexts, JSON is the modern, current best practice.\n\nOptions C and D: These require managing an external server running cron jobs, which introduces operational overhead and is not the recommended approach. Using native Cloud Storage lifecycle management is simpler, more reliable, and serverless."
+    },
+    {
+      "id": 32,
+      "correct": [
+        "B"
+      ],
+      "question": "You have built a three-tier application hosting critical workloads on Google Cloud. Due to a low budget, the database is designed as part of the application server. Your manager has asked you to design the infrastructure to follow the \"hot disaster recovery\" pattern. How would you design the architecture?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deploy one Compute Engine in one zone; failover to an on-premises server."
+        },
+        {
+          "letter": "B",
+          "text": "Deploy two Compute Engine instances in two zones, each located in different regions."
+        },
+        {
+          "letter": "C",
+          "text": "Deploy two Compute Engine instances in two zones, each located in the same region."
+        },
+        {
+          "letter": "D",
+          "text": "Deploy two Compute Engine instances in two zones located in the same region but in different projects."
+        }
+      ],
+      "explanation": "The \"Hot DR\" pattern requires a live, complete, and identical copy of the system running in a second, different region. This ensures that if the primary region fails, traffic can be redirected instantly to the standby region with near-zero downtime.\n\nKey distinction:\n- High Availability (HA): Protects against failures within a region by using multiple zones (Option C).\n- Disaster Recovery (DR): Protects against regional outages — requires different regions (Option B).\n\nOption B is the only configuration providing the necessary regional redundancy to meet the definition of a Hot DR pattern.",
+      "wrongOptions": "Option A: Failover to on-premises is not a cloud-native hot DR pattern and introduces complexity.\n\nOption C: Two zones in the same region provides HA but does NOT protect against a full regional outage — this is HA, not DR.\n\nOption D: Different projects in the same region still does not protect against a regional outage."
+    },
+    {
+      "id": 33,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company is forecasting a sharp increase in the number and size of Apache Spark and Hadoop jobs being run on your local data center. You want to utilize the cloud to help you scale this demand with the least amount of operations work and code change. Which product should you use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google Cloud Dataflow"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud Dataproc"
+        },
+        {
+          "letter": "C",
+          "text": "Google Cloud Compute Engine"
+        },
+        {
+          "letter": "D",
+          "text": "Google Cloud Kubernetes Engine"
+        }
+      ],
+      "explanation": "When migrating existing big data workloads, the \"least effort\" and \"least code change\" path is the primary consideration.\n\nCloud Dataproc is a fully managed service for Apache Spark and Hadoop. Because it is a native implementation, you can \"lift and shift\" existing jobs with minimal to no code changes. As a managed service, it significantly reduces operational overhead compared to manual cluster management.",
+      "wrongOptions": "Option A (Cloud Dataflow): While powerful, it requires rewriting jobs into the Apache Beam SDK, which violates the \"least code change\" constraint.\n\nOptions C (Compute Engine) and D (GKE): These represent Infrastructure as a Service (IaaS). They would require the team to manually configure and maintain the clusters, resulting in high operational work."
+    },
+    {
+      "id": 34,
+      "correct": [
+        "C"
+      ],
+      "question": "You are migrating your on-premises data center to Google Compute Engine and need to calculate the number of vCPUs to support your current Intel Xeon CPU processing workload. Your data center has four servers, each with two dual-core CPUs. How many vCPUs would your instances need in total to support the same workload without compromising performance?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "8"
+        },
+        {
+          "letter": "B",
+          "text": "16"
+        },
+        {
+          "letter": "C",
+          "text": "32"
+        },
+        {
+          "letter": "D",
+          "text": "64"
+        }
+      ],
+      "explanation": "In Google Cloud, one physical CPU core is equivalent to two vCPUs because each vCPU is a single hardware hyperthread, and each physical core contains two hyperthreads.\n\nStep-by-step calculation:\n1. Total CPUs: 4 servers × 2 CPUs per server = 8 total physical CPUs\n2. Total Cores: 8 CPUs × 2 cores per CPU (dual-core) = 16 physical cores\n3. Total vCPUs: 16 physical cores × 2 hyperthreads per core = 32 vCPUs\n\nTherefore, 32 vCPUs are required to support the workload without a loss in performance.",
+      "wrongOptions": "Option A (8): This would only count the total number of physical CPUs, ignoring cores and hyperthreading.\n\nOption B (16): This counts total physical cores but ignores the hyperthreading multiplier (×2 for vCPUs).\n\nOption D (64): This overcounts — it would be the result if each CPU had 4 cores instead of 2."
+    },
+    {
+      "id": 35,
+      "correct": [
+        "C"
+      ],
+      "question": "The database administration team has asked you to help them improve the performance of their new MySQL database server running on Google Compute Engine. They have an n1-standard-8 virtual machine with an 80 GB SSD Persistent Disk. What should they change to get better performance from this system?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Increase the virtual machine's memory to 64 GB."
+        },
+        {
+          "letter": "B",
+          "text": "Create a new virtual machine running PostgreSQL."
+        },
+        {
+          "letter": "C",
+          "text": "Dynamically resize the SSD Persistent Disk to 500 GB."
+        },
+        {
+          "letter": "D",
+          "text": "Migrate their performance metrics warehouse to BigQuery."
+        },
+        {
+          "letter": "E",
+          "text": "Modify all of their batch jobs to use bulk inserts into the database."
+        }
+      ],
+      "explanation": "A fundamental architectural principle of Google Cloud is the linear scaling of performance for Persistent Disks.\n\nOn SSD Persistent Disks, performance limits for IOPS and throughput scale linearly based on the size of the disk. An 80 GB disk has relatively low performance limits. For I/O-intensive tasks like database operations, the disk is the likely bottleneck.\n\nResizing the disk to 500 GB significantly increases these performance ceilings. This can be done dynamically with no downtime and no code changes.",
+      "wrongOptions": "Option A: Adding memory might provide minor improvements for caching but fails to address the underlying I/O bottleneck.\n\nOption B: Switching database engines requires a major architectural rewrite and doesn't address the disk performance issue.\n\nOption D: Migrating to BigQuery requires a major architectural rewrite.\n\nOption E: Modifying batch jobs might provide minor improvements but doesn't address the infrastructure bottleneck."
+    },
+    {
+      "id": 36,
+      "correct": [
+        "B"
+      ],
+      "question": "________ allows you to use a simple YAML configuration file to define rules that check every Kubernetes API request to ensure it follows your company's security and governance policies.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Config Connector"
+        },
+        {
+          "letter": "B",
+          "text": "Policy Controller"
+        },
+        {
+          "letter": "C",
+          "text": "Service Mesh"
+        },
+        {
+          "letter": "D",
+          "text": "Config Knowledge Base"
+        }
+      ],
+      "explanation": "The Anthos Policy Controller acts as an \"admission controller,\" serving as a gatekeeper for the Kubernetes API.\n\nBased on the open-source OPA Gatekeeper, it intercepts API requests and checks them against rules defined in YAML configuration files. If a request violates a policy (e.g., attempting to create a privileged container), the Policy Controller rejects the request before the resource is created.",
+      "wrongOptions": "Option A (Config Connector): Translates Kubernetes configurations into Google Cloud resources — it's about provisioning GCP resources, not enforcing governance policies.\n\nOption C (Service Mesh): Manages network traffic and security between containers, not Kubernetes API request policies.\n\nOption D (Config Knowledge Base): This is a fictional term and a distractor."
+    },
+    {
+      "id": 37,
+      "correct": [
+        "C"
+      ],
+      "question": "You want to optimize the performance of an accurate real-time weather charting application. The data comes from 50,000 sensors sending 10 readings a second in the format of a timestamp and sensor reading. Where should you store the data?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google BigQuery"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud SQL"
+        },
+        {
+          "letter": "C",
+          "text": "Google Cloud Bigtable"
+        },
+        {
+          "letter": "D",
+          "text": "Google Cloud Storage"
+        }
+      ],
+      "explanation": "The Math: 50,000 sensors × 10 readings/sec = 500,000 writes per second.\n\nCloud Bigtable is the only managed service capable of handling 500,000 writes per second with sub-millisecond latency. It is specifically designed for high-volume time-series data and IoT applications.",
+      "wrongOptions": "Option A (BigQuery): Optimized for analytics on existing data, not for 500,000 individual real-time streaming inserts per second.\n\nOption B (Cloud SQL): A relational database that cannot handle this volume of writes — typically limited to hundreds of writes per second.\n\nOption D (Cloud Storage): Object storage that is inefficient for processing millions of tiny, individual records in real-time."
+    },
+    {
+      "id": 38,
+      "correct": [
+        "B",
+        "C"
+      ],
+      "question": "Which of the following statements about Cloud SQL are true? (Select two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Cloud SQL database's capacity must be increased manually."
+        },
+        {
+          "letter": "B",
+          "text": "By default, a Cloud SQL database's capacity is increased automatically when the amount of available space is low."
+        },
+        {
+          "letter": "C",
+          "text": "To prevent runaway growth of a Cloud SQL database's size, you can enable the automatic storage increase limit."
+        },
+        {
+          "letter": "D",
+          "text": "There is no limit to the size of a Cloud SQL database."
+        }
+      ],
+      "explanation": "Cloud SQL is a managed service that automates storage administration to prevent outages and manage costs.\n\nOption B (Automatic Scaling): By default, Cloud SQL detects when storage is running low and automatically increases the capacity of the instance to prevent database failure.\n\nOption C (Cost Control): Architects can set an automatic storage increase limit. This ensures the database can grow to handle needs while preventing unexpected billing spikes from \"runaway\" storage growth.",
+      "wrongOptions": "Option A: False — the service is automated by default. Manual intervention is not required.\n\nOption D: False — all Cloud SQL instances have upper limits based on the configuration and database engine used."
+    },
+    {
+      "id": 39,
+      "correct": [
+        "B"
+      ],
+      "question": "You need to develop a resiliency testing strategy to ensure your user feedback portal maintains a 99.99% availability SLA when you introduce additional user load next quarter. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Capture existing user input and replay it until autoscale is triggered; simultaneously terminate all resources in one zone."
+        },
+        {
+          "letter": "B",
+          "text": "Create synthetic random user input. Replay synthetic load until autoscale logic is triggered on at least one layer and introduce chaos into the system by terminating random resources on both zones."
+        },
+        {
+          "letter": "C",
+          "text": "Expose the system to a larger group of users each day until autoscale is triggered; simultaneously terminate random resources."
+        },
+        {
+          "letter": "D",
+          "text": "Capture existing user input and replay it until resource utilization reaches 80%; deploy enough resources to handle 200% of expected load."
+        }
+      ],
+      "explanation": "A robust resiliency strategy involves testing the system's ability to scale AND its ability to self-heal under failure (Chaos Engineering).\n\n1. Synthetic Random Input: Provides a more realistic stress test of unpredictable future traffic than replaying existing, small-group user data.\n2. Verify Autoscale: Replaying load until the system scales ensures the elasticity logic is functioning correctly.\n3. Chaos Engineering: Terminating random resources in both zones while the system is under load tests the application's true resiliency and its ability to maintain the SLA despite hardware or software failures.",
+      "wrongOptions": "Option A: Terminating all resources in one zone simultaneously is too destructive — it does not simulate realistic failure patterns.\n\nOption C: Critical failure in judgment — you should never conduct stress and failure testing on a live group of real users.\n\nOption D: This only tests scaling capacity but does not test chaos/failure scenarios that are essential for a 99.99% SLA."
+    },
+    {
+      "id": 40,
+      "correct": [
+        "D"
+      ],
+      "question": "________ is a managed microservices platform that allows you to just build your application into a container, then let Google worry about handling all the infrastructure management from there.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Service Mesh"
+        },
+        {
+          "letter": "B",
+          "text": "Config Connector"
+        },
+        {
+          "letter": "C",
+          "text": "Cloud Build"
+        },
+        {
+          "letter": "D",
+          "text": "Cloud Run"
+        }
+      ],
+      "explanation": "The question describes a \"serverless container\" model where the focus is entirely on the application code, not the servers.\n\nCloud Run is a fully managed, serverless platform. It allows architects to deploy containerized applications without managing nodes, clusters, or scaling logic. Google handles all infrastructure, load balancing, and scaling — including scaling down to zero when there is no traffic.",
+      "wrongOptions": "Option A (Service Mesh): Manages communication between running containers, but does not host them.\n\nOption B (Config Connector): A tool for provisioning Google Cloud resources using Kubernetes.\n\nOption C (Cloud Build): A CI/CD service that builds the container images but does not run them as a hosted platform."
+    }
+  ]
+}

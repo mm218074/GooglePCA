@@ -1,0 +1,545 @@
+{
+  "questions": [
+    {
+      "id": 61,
+      "correct": [
+        "A"
+      ],
+      "question": "You are an architect designing the disaster recovery (DR) strategy for an enterprise customer whose solution runs on Google Cloud Platform. The primary deployment site runs in us-central1 with the DR site in europe-west1. You are concerned about the time it takes in exporting and importing the snapshots of persistent disks between the primary and DR regions. Which feature of GCE addresses the concern of the cross-region copy of snapshots?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Snapshots are global resources in GCE. They are available across all the regions by default."
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud Platform offers disaster recovery as a service that doesn't require copying the snapshots across regions."
+        },
+        {
+          "letter": "C",
+          "text": "Persistent disks are global resources in GCE. They are available across all the regions by default. The same disk can be mounted on the instances running in primary and DR sites."
+        },
+        {
+          "letter": "D",
+          "text": "Google Developer Console has a scheduler that can automatically copy snapshots between regions."
+        }
+      ],
+      "explanation": "In Google Compute Engine (GCE), snapshots are architectural global resources. This means that a snapshot created from a disk in us-central1 is immediately accessible in europe-west1 without any manual export or time-consuming cross-region data transfer. This native functionality is critical for meeting aggressive RTO/RPO targets because it eliminates the latency of moving large data blocks between regions during a disaster.",
+      "wrongOptions": "Option B: GCP does not offer a standalone 'DR as a service' — architects must design DR solutions using available services.\n\nOption C: Technically incorrect — persistent disks (PDs) are regional resources; you cannot mount a disk in one region to an instance in another.\n\nOption D: A distractor — while you can schedule snapshot creation, the 'copying' phase is unnecessary because the resource is already global by default."
+    },
+    {
+      "id": 62,
+      "correct": [
+        "C"
+      ],
+      "question": "Your organization wants to control IAM policies for different departments independently but centrally. Which approach should you take?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Multiple organizations with multiple folders"
+        },
+        {
+          "letter": "B",
+          "text": "Multiple organizations, one for each department"
+        },
+        {
+          "letter": "C",
+          "text": "A single organization with folders for each department"
+        },
+        {
+          "letter": "D",
+          "text": "A single organization with multiple projects, each with a central owner"
+        }
+      ],
+      "explanation": "The Google Cloud resource hierarchy provides a framework for both central governance and delegated administration. A single organization node acts as the root of the hierarchy, ensuring centralized billing and security control. By creating folders for each department, you can apply IAM policies at the folder level. These policies are inherited by all projects within that folder, allowing department leads to manage their own resources independently while remaining under the organization's central umbrella.",
+      "wrongOptions": "Options A and B: Using multiple organizations fragments governance and billing, making central oversight nearly impossible.\n\nOption D: Not a best practice for 'independent' control — managing policies solely at the project level is administratively burdensome and prone to configuration drift."
+    },
+    {
+      "id": 63,
+      "correct": [
+        "B"
+      ],
+      "question": "You deploy your custom Java application to Google App Engine. It fails to deploy and gives you a stack trace that includes 'java.lang.SecurityException: SHA1 digest error.' What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Upload missing JAR files and redeploy your application."
+        },
+        {
+          "letter": "B",
+          "text": "Digitally sign all of your JAR files and redeploy your application."
+        },
+        {
+          "letter": "C",
+          "text": "Recompile the servlet class using an MD5 hash instead of SHA1."
+        }
+      ],
+      "explanation": "The 'SHA1 digest error' is a security exception that occurs when the Java runtime cannot verify the integrity or signature of a JAR file. This usually happens if a JAR was never signed, was signed incorrectly, or was modified after the signature was applied. To satisfy the security requirements of the App Engine environment, you must ensure that all application JAR files are digitally signed with a valid certificate before redeployment.",
+      "wrongOptions": "Option A: Incorrect — the error indicates a signature mismatch, not a missing file.\n\nOption C: Switching to MD5 is a security downgrade and does not address the fundamental issue of the JAR package signature."
+    },
+    {
+      "id": 64,
+      "correct": [
+        "C",
+        "D"
+      ],
+      "question": "A global technology firm acquires clients by letting them download reports after submitting a simple online form. They are currently using GCP infrastructure and Cloud Storage to store the reports. They observed that clients in some locations are facing issues downloading the content. They also observed that some users are accessing the reports without submitting the form and want to avoid such behavior. What services in GCP should they be using? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Enable multi-regional storage for Cloud Storage. This enables the reports to be available in multiple regions."
+        },
+        {
+          "letter": "B",
+          "text": "Enable multi-regional storage with turbo replication for Cloud Storage. This enables the reports to be available in multiple regions."
+        },
+        {
+          "letter": "C",
+          "text": "Use Signed URLs with limited expiry time to give access to the reports."
+        },
+        {
+          "letter": "D",
+          "text": "Enable Cloud CDN for the Cloud Storage where the reports are stored."
+        }
+      ],
+      "explanation": "This scenario involves two distinct problems: global performance and unauthorized access.\n\nPerformance (Option D): Cloud CDN caches files at Google's edge locations. This ensures that users in various global locations download reports from a nearby cache, reducing latency and solving the performance issue.\n\nSecurity (Option C): Signed URLs provide time-limited access to a specific Cloud Storage object. By generating a Signed URL only after a form submission, you prevent users from bypassing the acquisition process.",
+      "wrongOptions": "Options A and B: While multi-regional storage helps with high availability and disaster recovery, the data still travels over the public internet to reach the end user. Only Cloud CDN (Option D) brings the content to the network edge for optimized download performance."
+    },
+    {
+      "id": 65,
+      "correct": [
+        "C"
+      ],
+      "question": "You are designing a mobile chat application. You want to ensure people cannot spoof chat messages by proving a message was sent by a specific user. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Tag messages client-side with the originating user identifier and the destination user."
+        },
+        {
+          "letter": "B",
+          "text": "Encrypt the message client-side using block-based encryption with a shared key."
+        },
+        {
+          "letter": "C",
+          "text": "Use public key infrastructure (PKI) to encrypt the message client-side using the originating user's private key."
+        },
+        {
+          "letter": "D",
+          "text": "Use a trusted certificate authority to enable SSL connectivity between the client application and the server."
+        }
+      ],
+      "explanation": "To prevent spoofing and ensure non-repudiation, you must use Public Key Infrastructure (PKI). Using the originating user's private key to sign the message provides cryptographic proof of origin — because only the sender has access to their unique private key. The recipient uses the sender's public key to verify the signature.",
+      "wrongOptions": "Option A: Easily faked — tags can be forged by any client and offer no cryptographic security.\n\nOption B (shared key): Useful for confidentiality but does not prove which party sent the message, since both parties have the same key.\n\nOption D (SSL/TLS): Secures the transport of data to the server but does not authenticate the user-to-user message identity."
+    },
+    {
+      "id": 66,
+      "correct": [
+        "B"
+      ],
+      "question": "As part of implementing their disaster recovery plan, your company is trying to replicate their production MySQL database from their private data center to their GCP project using a Google Cloud VPN connection. They are experiencing latency issues and a small amount of packet loss that is disrupting the replication. What should they do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Configure their replication to use UDP."
+        },
+        {
+          "letter": "B",
+          "text": "Configure a Google Cloud dedicated interconnect."
+        },
+        {
+          "letter": "C",
+          "text": "Restore their database daily using Google Cloud SQL."
+        },
+        {
+          "letter": "D",
+          "text": "Add additional VPN connections and load balance them."
+        },
+        {
+          "letter": "E",
+          "text": "Send the replicated transaction to Google Cloud Pub/Sub."
+        }
+      ],
+      "explanation": "Cloud VPN relies on the public internet, which is inherently unpredictable regarding latency and packet loss. Production database replication is highly sensitive to these network fluctuations. Dedicated Interconnect provides a direct, physical, and private link to Google's network, bypassing the public internet entirely. This ensures the stable, low-latency, and high-bandwidth connection required for critical replication.",
+      "wrongOptions": "Option A: Database replication requires the reliability of TCP — using UDP would make the data loss problem worse.\n\nOption D: Adding more VPNs still leaves the traffic exposed to the public internet's instability.\n\nOption C: Daily restores would result in unacceptable data loss (RPO of up to 24 hours).\n\nOption E: Pub/Sub is a messaging service, not a database replication solution."
+    },
+    {
+      "id": 67,
+      "correct": [
+        "B"
+      ],
+      "question": "You are working in a fast-growing organization that has its business-critical applications hosted in GCP. Due to a lack of employees, you need an easy way to continuously redeploy certain infrastructure for web applications. What's the best way to do this?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use Forseti Security to get configuration details from existing projects."
+        },
+        {
+          "letter": "B",
+          "text": "Make use of Cloud Deployment Manager."
+        },
+        {
+          "letter": "C",
+          "text": "Create resources one by one."
+        },
+        {
+          "letter": "D",
+          "text": "Use asset history from Resource Manager."
+        }
+      ],
+      "explanation": "Cloud Deployment Manager is Google Cloud's native Infrastructure as Code (IaC) tool. It allows you to define resources in declarative YAML files, enabling automated, repeatable, and consistent deployments. For a team with limited staffing, this automation is the most efficient way to scale and manage infrastructure without the manual effort and error risk of the Console.",
+      "wrongOptions": "Option A (Forseti Security): Useful for auditing and security visibility but is not a tool for provisioning or redeploying infrastructure.\n\nOption C: The opposite of the goal — manual and inefficient.\n\nOption D (Asset history from Resource Manager): Useful for auditing resource changes, not for redeploying infrastructure."
+    },
+    {
+      "id": 68,
+      "correct": [
+        "C"
+      ],
+      "question": "Your customer support tool logs all email and chat conversations to Cloud Bigtable for retention and analysis. What is the recommended approach for sanitizing this data of personally identifiable information (PII) or payment card information (PCI) before initial storage?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Hash all data using SHA-256."
+        },
+        {
+          "letter": "B",
+          "text": "Encrypt all data using elliptic curve cryptography."
+        },
+        {
+          "letter": "C",
+          "text": "De-identify the data with the Cloud Data Loss Prevention (DLP) API."
+        },
+        {
+          "letter": "D",
+          "text": "Use regular expressions to find and redact phone numbers, email addresses, and credit card numbers."
+        }
+      ],
+      "explanation": "The Cloud Data Loss Prevention (DLP) API is the managed service specifically built to discover, classify, and protect sensitive data. It uses powerful pre-built detectors for over 150 sensitive data types (including credit card numbers and PII) and can automatically redact or de-identify them at scale.",
+      "wrongOptions": "Option A (Hashing): Makes the entire dataset unusable for analysis — you cannot read or search hashed data.\n\nOption B (Encryption): Protects the data from unauthorized viewers but doesn't 'sanitize' or remove the PII from the logs.\n\nOption D (Regular expressions): Difficult to maintain and prone to missing variations in sensitive data formats."
+    },
+    {
+      "id": 69,
+      "correct": [
+        "A"
+      ],
+      "question": "You are using Cloud Shell and need to install a custom utility for use in a few weeks. Where can you store the file so it is in the default execution path and persists across sessions?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "/bin"
+        },
+        {
+          "letter": "B",
+          "text": "Cloud Storage"
+        },
+        {
+          "letter": "C",
+          "text": "/google/scripts"
+        },
+        {
+          "letter": "D",
+          "text": "/usr/local/bin"
+        }
+      ],
+      "explanation": "In Cloud Shell, your home directory is backed by a persistent disk. The /bin directory within your home folder (~/bin) is pre-configured in the system's default $PATH execution variable. Any utility stored here will survive the termination of your Cloud Shell session and can be executed by simply typing the command name.",
+      "wrongOptions": "Option B (Cloud Storage): Persistent but not in the execution path — you would need to manually download and execute files.\n\nOption D (/usr/local/bin): Part of the temporary root file system of the Cloud Shell instance and will be wiped when the session ends.\n\nOption C (/google/scripts): Not a standard path and not persistent."
+    },
+    {
+      "id": 70,
+      "correct": [
+        "B"
+      ],
+      "question": "A global insurance company that uses Google Cloud Platform plans for its employees to work from home. It has requested a scalable, cost-effective solution that can enable encrypted desktop streaming so that employees can access corporate resources. Which of the following would you recommend?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google Workspace"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud Virtual Desktop"
+        },
+        {
+          "letter": "C",
+          "text": "Create an encrypted connection to the Office network"
+        },
+        {
+          "letter": "D",
+          "text": "Enable Remote Desktop Protocol (RDP) to connect to remote desktops"
+        }
+      ],
+      "explanation": "Google Cloud Virtual Desktop is the managed Virtual Desktop Infrastructure (VDI) solution on Google Cloud. It provides a secure, scalable, and encrypted environment for remote employees to access corporate tools and data. As a managed service, it reduces the operational burden of managing individual virtual machines.",
+      "wrongOptions": "Option A (Workspace): Provides productivity tools (Gmail, Docs, etc.) but not a full virtual desktop environment.\n\nOption C: Not a specific GCP service — 'creating an encrypted connection' is vague and not a managed solution.\n\nOption D: RDP is a protocol, not a managed solution. Managing raw RDP instances is not scalable or easily managed at the enterprise level."
+    },
+    {
+      "id": 71,
+      "correct": [
+        "A"
+      ],
+      "question": "You want to create a private connection between your instances on Compute Engine and your on-premises data center. You require a connection of at least 20 Gbps. You want to follow Google recommended practices. How should you set up the connection?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a VPC and connect it to your on-premises data center using Dedicated Interconnect."
+        },
+        {
+          "letter": "B",
+          "text": "Create a VPC and connect it to your on-premises data center using a single Cloud VPN."
+        },
+        {
+          "letter": "C",
+          "text": "Create a Cloud Content Delivery Network (Cloud CDN) and connect it to your on-premises data center using Dedicated Interconnect."
+        },
+        {
+          "letter": "D",
+          "text": "Create a Cloud Content Delivery Network (Cloud CDN) and connect it to your on-premises data center using a single Cloud VPN."
+        }
+      ],
+      "explanation": "Dedicated Interconnect is the only option that provides a private, physical link to Google's network with guaranteed high bandwidth. To meet a 20 Gbps requirement, an architect would bundle multiple 10 Gbps or 100 Gbps circuits. This provides the necessary throughput and meets the 'private connection' requirement.",
+      "wrongOptions": "Option B: A single Cloud VPN cannot guarantee 20 Gbps and operates over the public internet.\n\nOptions C and D: Architectural errors — Cloud CDN is a content distribution service for end users, not a hybrid connectivity tool."
+    },
+    {
+      "id": 72,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company is using GCP Compute Engine to host its applications. One application crashed after a user repeatedly executed a specific REST API call. The instance was down for 3 hours. What would you do to make sure that next time this happens, you are notified immediately if CPU usage goes above 90%?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Choose an alerting policy based on process health in Cloud Monitoring."
+        },
+        {
+          "letter": "B",
+          "text": "Choose an alerting policy based on metric rate in Cloud Monitoring."
+        },
+        {
+          "letter": "C",
+          "text": "Choose an alerting policy based on uptime check in Cloud Monitoring."
+        },
+        {
+          "letter": "D",
+          "text": "Create a script in your VM instance to track the CPU usage and trigger the notification."
+        }
+      ],
+      "explanation": "Cloud Monitoring is the standard tool for observability in GCP. To be notified about high resource consumption, you create an alerting policy based on a specific metric rate (in this case, CPU utilization). You set the threshold at 90% to trigger an immediate notification.",
+      "wrongOptions": "Option A (Process health): Monitors whether a specific service is running, but doesn't measure how much CPU that service is using.\n\nOption C (Uptime check): Tells you if the service is reachable from the outside, but won't warn you about high load before a crash occurs.\n\nOption D: A manual approach that increases maintenance overhead compared to the native managed service."
+    },
+    {
+      "id": 73,
+      "correct": [
+        "B"
+      ],
+      "question": "You are analyzing and defining business processes to support your startup's trial usage of GCP, and you don't yet know what consumer demand for your product will be. Your manager requires you to minimize GCP service costs and adhere to Google best practices. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Utilize free tier and sustained use discounts. Provision a staff position for service cost management."
+        },
+        {
+          "letter": "B",
+          "text": "Utilize free tier and sustained use discounts. Provide training to the team about service cost management."
+        },
+        {
+          "letter": "C",
+          "text": "Utilize free tier and committed use discounts. Provision a staff position for service cost management."
+        },
+        {
+          "letter": "D",
+          "text": "Utilize free tier and committed use discounts. Provide training to the team about service cost management."
+        }
+      ],
+      "explanation": "For a startup with unpredictable demand, Sustained Use Discounts (SUDs) are the superior choice. SUDs are automatic and require no contract, making them ideal for fluctuating workloads. While Committed Use Discounts (CUDs) offer deeper percentage savings, they require a 1- or 3-year commitment, which presents high financial risk when future demand is unknown.\n\nAdditionally, training the existing team (Option B) is more cost-effective for a startup than hiring a dedicated new staff member.",
+      "wrongOptions": "Options C and D: Committed Use Discounts require a 1-3 year financial commitment, which is too risky for a startup that doesn't know its demand.\n\nOptions A and C: Provisioning a dedicated staff position is more expensive than cross-training the existing team."
+    },
+    {
+      "id": 74,
+      "correct": [
+        "D"
+      ],
+      "question": "You are building a continuous deployment pipeline for a project stored in a git source repository and want to ensure that code changes can be verified before deploying to production. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use Spinnaker to deploy builds to production using the red/black deployment strategy so that changes can easily be rolled back."
+        },
+        {
+          "letter": "B",
+          "text": "Use Spinnaker to deploy builds to production and run tests on production deployments."
+        },
+        {
+          "letter": "C",
+          "text": "Use Jenkins to build the staging branches and the master branch. Build and deploy changes to production for 10% of users before doing a complete roll out."
+        },
+        {
+          "letter": "D",
+          "text": "Use Jenkins to monitor tags in the repository. Deploy staging tags to a staging environment for testing. After testing, tag the repository for production and deploy that to the production environment."
+        }
+      ],
+      "explanation": "Verification before production requires a dedicated non-production environment. The workflow in Option D provides a clear gate: Jenkins monitors tags, a staging version is deployed and tested, and only then is a production tag applied for the final rollout. This ensures that only verified code reaches live users.",
+      "wrongOptions": "Option A: Red/black (blue-green) enables easy rollback but doesn't address verification before deployment.\n\nOption B: Testing changes after they are already in production is highly risky.\n\nOption C: While a Canary release (10% of users) is a valid strategy, it does not explicitly mention the critical staging environment verification step."
+    },
+    {
+      "id": 75,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company has several partners across different countries that need to access BigQuery country-specific tables for historic data analysis. What should you do to guarantee that each partner accesses only their specific tables on BigQuery without altering the data?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a single data set for all the countries. Grant the role roles/bigquery.metadataViewer at the table level for each partner."
+        },
+        {
+          "letter": "B",
+          "text": "Create a single data set for all the countries. Grant the role roles/bigquery.dataViewer at the table level for each partner."
+        },
+        {
+          "letter": "C",
+          "text": "Create a single data set for all the countries. Grant the role roles/bigquery.dataOwner at the table level for each partner."
+        },
+        {
+          "letter": "D",
+          "text": "Create a single data set for all the countries. Grant the role roles/bigquery.dataEditor at the table level for each partner."
+        }
+      ],
+      "explanation": "To provide secure, granular, read-only access, the roles/bigquery.dataViewer role must be used. By applying this role at the table level, you ensure that partners can only see the data intended for them and cannot modify it.",
+      "wrongOptions": "Option A (metadataViewer): Allows a partner to see the table schema but not the actual records required for their analysis.\n\nOption C (dataOwner): Allows partners to modify or delete data — violates the read-only requirement.\n\nOption D (dataEditor): Also allows partners to modify data — violates the read-only requirement."
+    },
+    {
+      "id": 76,
+      "correct": [
+        "C"
+      ],
+      "question": "Your company has an outage in your Compute Engine managed instance group (MIG). All instances keep restarting after 5 seconds. You have a health check configured, but autoscaling is disabled. You need to make sure a Linux expert can access the VMs to investigate. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Grant your colleague the IAM role of project viewer."
+        },
+        {
+          "letter": "B",
+          "text": "Perform a rolling restart on the instance group."
+        },
+        {
+          "letter": "C",
+          "text": "Disable the health check for the instance group; add his SSH key to the project-wide SSH keys."
+        },
+        {
+          "letter": "D",
+          "text": "Disable autoscaling for the instance group; add his SSH key to the project-wide SSH keys."
+        }
+      ],
+      "explanation": "In a Managed Instance Group, the 'self-healing' mechanism uses the health check to determine if an instance is alive. If the instance fails the check, the MIG automatically deletes and recreates it. When instances are in a 5-second crash loop, the health check is triggering this constant recreation.\n\nDisabling the health check stops the self-healing cycle, keeping the instances alive so the Linux expert can log in via SSH to investigate the root cause.",
+      "wrongOptions": "Option A (Viewer role): Does not grant SSH permissions — the expert cannot access the VMs.\n\nOption B (Rolling restart): Useless because the instances are already restarting in a loop.\n\nOption D (Disable autoscaling): Irrelevant because the prompt explicitly states autoscaling is already disabled. The problem is the health check-triggered self-healing."
+    },
+    {
+      "id": 77,
+      "correct": [
+        "C"
+      ],
+      "question": "Your company is migrating its on-premises data center into the cloud and wants to integrate Google Kubernetes Engine (GKE). Parts of your architecture must also be PCI-DSS compliant. Which of the following is most accurate?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "App Engine is the only compute platform on GCP that is certified for PCI-DSS hosting."
+        },
+        {
+          "letter": "B",
+          "text": "GKE cannot be used under PCI-DSS because it is considered shared hosting."
+        },
+        {
+          "letter": "C",
+          "text": "GKE and GCP provide the tools you need to build a PCI-DSS compliant environment."
+        },
+        {
+          "letter": "D",
+          "text": "All Google Cloud services are usable because Google Cloud Platform is certified PCI compliant."
+        }
+      ],
+      "explanation": "Compliance is a shared responsibility. While Google's underlying infrastructure is PCI-compliant, customers must configure their services (like GKE) to meet PCI-DSS standards. GKE provides all the necessary technical controls — such as IAM, network policies, and audit logging — to build a fully compliant application environment.",
+      "wrongOptions": "Option A: Factually incorrect — multiple GCP compute services can be used in PCI-DSS environments.\n\nOption B: False — GKE is widely used for compliant workloads with proper configuration.\n\nOption D: Dangerous — it ignores the customer's responsibility for secure configuration and data management under the shared responsibility model."
+    },
+    {
+      "id": 78,
+      "correct": [
+        "D"
+      ],
+      "question": "Your manager has asked you to ensure that packages in container images are updated and any images with security issues should not be pushed to your live GKE environment. Which of the following services would you use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deployment strategies"
+        },
+        {
+          "letter": "B",
+          "text": "Binary Authorization"
+        },
+        {
+          "letter": "C",
+          "text": "Vulnerability Scanning"
+        },
+        {
+          "letter": "D",
+          "text": "Vulnerability Scanning with Binary Authorization"
+        }
+      ],
+      "explanation": "Security in a containerized pipeline requires both detection and enforcement.\n\nVulnerability Scanning identifies outdated packages and security holes within the images.\n\nBinary Authorization acts as a gatekeeper at deploy-time, ensuring that only images signed by a trusted authority (based on successful scans) are allowed to run in the GKE cluster.\n\nBoth together form a complete pipeline security solution.",
+      "wrongOptions": "Option C (Vulnerability Scanning alone): Identifies problems but cannot block the deployment of vulnerable images.\n\nOption B (Binary Authorization alone): Can block deployments but lacks the intelligence to know if an image is actually vulnerable without the scanner's input.\n\nOption A (Deployment strategies): Relates to how updates are rolled out, not to image security scanning and enforcement."
+    },
+    {
+      "id": 79,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company has multiple on-premises systems that serve as sources for reporting. The data has become degraded over time. You want to use Google recommended practices to detect anomalies in your data. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Upload your files into Cloud Storage. Use Cloud Datalab to explore and clean your data."
+        },
+        {
+          "letter": "B",
+          "text": "Upload your files into Cloud Storage. Use Cloud Dataprep to explore and clean your data."
+        },
+        {
+          "letter": "C",
+          "text": "Connect Cloud Datalab to your on-premises systems."
+        },
+        {
+          "letter": "D",
+          "text": "Connect Cloud Dataprep to your on-premises systems."
+        }
+      ],
+      "explanation": "Google Cloud best practices suggest a two-stage process for data cleaning. First, upload raw data to Cloud Storage to stage it. Second, use Cloud Dataprep by Trifacta, a specialized, visual tool for discovering and cleaning anomalies in degraded data.",
+      "wrongOptions": "Options C and D: Connecting preparation tools directly to on-premises systems is less efficient and doesn't follow the recommended staging pattern. Data should first be staged in Cloud Storage.\n\nOption A (Datalab): A coding/notebook environment that can clean data, but Dataprep is the purpose-built tool for this specific 'clean and explore' task — it provides a visual interface designed for data quality work."
+    },
+    {
+      "id": 80,
+      "correct": [
+        "C"
+      ],
+      "question": "GCP resources are managed hierarchically using organization, folders, and projects. When IAM policies exist at these different levels, what is the effective policy at a particular node of the hierarchy?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The effective policy is determined only by the policy set at the node."
+        },
+        {
+          "letter": "B",
+          "text": "The effective policy is the policy set at the node and restricted by the policies of its ancestors."
+        },
+        {
+          "letter": "C",
+          "text": "The effective policy is the union of the policy set at the node and policies inherited from its ancestors."
+        },
+        {
+          "letter": "D",
+          "text": "The effective policy is the intersection of the policy set at the node and policies inherited from its ancestors."
+        }
+      ],
+      "explanation": "IAM policies in Google Cloud are additive. The effective policy for any resource is the union of the policy applied at that resource level and all policies inherited from parent folders and the organization. Critically, permissions granted at a higher level cannot be taken away or restricted at a lower level — they can only be added to as the policy flows downward.",
+      "wrongOptions": "Option A: Incorrect — policies are inherited from the hierarchy above, not just from the node itself.\n\nOption B: Incorrect — ancestors provide permissions; they do not restrict or 'deny' them in the standard IAM model.\n\nOption D (Intersection): Incorrect — a user does not need to be granted a role at every level to have the permission. The union (additive) model means permissions accumulate."
+    }
+  ]
+}

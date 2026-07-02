@@ -1,0 +1,544 @@
+{
+  "questions": [
+    {
+      "id": 81,
+      "correct": [
+        "C"
+      ],
+      "question": "You are migrating an on-premises solution to Google Cloud in several phases. You will use Cloud VPN to maintain a connection between your on-premises systems and Google Cloud until the migration is completed. You want to make sure all your on-premises systems remain reachable during this period. How should you organize your networking in Google Cloud?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use the same IP range on Google Cloud as you use on-premises."
+        },
+        {
+          "letter": "B",
+          "text": "Use the same IP range on Google Cloud as you use on-premises for your primary IP range and use a secondary range that does not overlap with the range you use on-premises."
+        },
+        {
+          "letter": "C",
+          "text": "Use an IP range on Google Cloud that does not overlap with the range you use on-premises."
+        },
+        {
+          "letter": "D",
+          "text": "Use an IP range on Google Cloud that does not overlap with the range you use on-premises for your primary IP range and use a secondary range with the same IP range as you use on-premises."
+        }
+      ],
+      "explanation": "The foundational requirement for hybrid cloud connectivity (whether via Cloud VPN or Dedicated Interconnect) is avoiding CIDR overlap. When two networks are bridged, routers must have unambiguous paths to every destination. If IP ranges overlap, you create transitive routing conflicts — the router cannot distinguish whether a packet's destination is internal to the VPC or across the VPN tunnel to the on-premises data center. Establishing unique, non-overlapping IP blocks is the only way to ensure all systems remain reachable across the hybrid environment.",
+      "wrongOptions": "Options A, B, and D: All architecturally non-viable because they introduce overlapping address space. Even an overlap in a secondary range (Option D) will break connectivity for any services utilizing those specific IPs, leading to unpredictable routing behavior and broken service discovery."
+    },
+    {
+      "id": 82,
+      "correct": [
+        "A"
+      ],
+      "question": "You have found an error in your App Engine application caused by missing Cloud Datastore indexes. You have created a YAML file with the required indexes and want to deploy these new indexes to Cloud Datastore. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Point gcloud datastore indexes create to your configuration file."
+        },
+        {
+          "letter": "B",
+          "text": "Upload the configuration file to App Engine's default Cloud Storage bucket and have App Engine detect the new indexes."
+        },
+        {
+          "letter": "C",
+          "text": "In the GCP console, use Datastore Admin to delete the current indexes and upload the new configuration file."
+        },
+        {
+          "letter": "D",
+          "text": "Create an HTTP request to the built-in Python module to send the index configuration file to your application."
+        }
+      ],
+      "explanation": "Managing Cloud Datastore (or Firestore in Datastore mode) indexes is a control-plane administrative action. The gcloud CLI tool provides an idempotent and automatable path via the command: gcloud datastore indexes create INDEX_FILE. This allows architects to treat index definitions as 'Infrastructure as Code,' deploying them from a local environment or a CI/CD pipeline.",
+      "wrongOptions": "Option B: App Engine does not possess a 'watcher' mechanism for Cloud Storage buckets to trigger database index updates.\n\nOption C: A high-risk, manual approach — deleting existing indexes is unnecessary and could cause immediate production outages for other active queries.\n\nOption D: Represents a legacy method where application code was used to trigger index generation. Modern best practices favor using the CLI for clear separation of concerns."
+    },
+    {
+      "id": 83,
+      "correct": [
+        "C"
+      ],
+      "question": "You have an application that will run on Compute Engine. You need to design an architecture that takes into account a disaster recovery plan that requires your application to fail over to another region in case of a regional outage. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deploy the application on two Compute Engine instances in the same project but in a different region. Use the first instance to serve traffic and use the HTTP load balancing service to fail over to the standby instance."
+        },
+        {
+          "letter": "B",
+          "text": "Deploy the application on a Compute Engine instance. Use the instance to serve traffic and use the HTTP load balancing service to fail over to an instance on your premises."
+        },
+        {
+          "letter": "C",
+          "text": "Deploy the application on two Compute Engine instance groups each in the same project but in a different region. Use the first instance group to serve traffic and use the HTTP load balancing service to fail over to the standby instance group."
+        },
+        {
+          "letter": "D",
+          "text": "Deploy the application on two Compute Engine instance groups each in a separate project and a different region."
+        }
+      ],
+      "explanation": "This design utilizes Managed Instance Groups (MIGs) in two separate regions, providing self-healing and autoscaling. By fronting these MIGs with a Global HTTP(S) Load Balancer, you leverage the Global Load Balancing Anycast IP. This allows Google's frontend to automatically detect a regional backend failure and seamlessly redirect traffic to the healthy standby MIG without requiring DNS changes or manual intervention.",
+      "wrongOptions": "Options A and B: Use standalone instances, which lack the health-checking and auto-recreation capabilities of MIGs.\n\nOption D: Splitting a single application across multiple projects introduces significant administrative complexity regarding IAM, networking, and load balancer configuration without providing additional DR benefits."
+    },
+    {
+      "id": 84,
+      "correct": [
+        "D"
+      ],
+      "question": "You are deploying an application on App Engine that needs to integrate with an on-premises database. For security purposes, your on-premises database must not be accessible through the public internet. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deploy your application on App Engine Standard Environment and use App Engine Firewall rules."
+        },
+        {
+          "letter": "B",
+          "text": "Deploy your application on App Engine Standard Environment and use Cloud VPN."
+        },
+        {
+          "letter": "C",
+          "text": "Deploy your application on App Engine Flexible Environment and use App Engine firewall rules to limit access to an open database."
+        },
+        {
+          "letter": "D",
+          "text": "Deploy your application on App Engine Flexible Environment and use Cloud VPN to limit access to the on-premises database."
+        }
+      ],
+      "explanation": "To access private on-premises resources, the application needs to be 'VPC-aware.' The App Engine Flexible Environment is required here because it runs within your project's VPC, allowing it to route traffic through a Cloud VPN tunnel or Interconnect. This enables the application to communicate with the database via its private IP address, ensuring the database remains completely shielded from the public internet.",
+      "wrongOptions": "Options A and B: The Standard Environment operates in a sandbox that, by default, lacks the direct VPC integration required for private hybrid networking.\n\nOption C: Fails the security requirement — exposing a database to the public internet and relying solely on firewalls is significantly less secure than using a private tunnel."
+    },
+    {
+      "id": 85,
+      "correct": [
+        "A"
+      ],
+      "question": "You are working in a highly secured environment where public internet access from Compute Engine VMs is not allowed. You do not yet have a VPN connection to access an on-premises file server. You need to install specific software on a Compute Engine instance. How should you install the software?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Upload the required installation files to Cloud Storage. Configure the VM on a subnet with Private Google Access. Assign only an internal IP address to the VM. Download the files using gsutil."
+        },
+        {
+          "letter": "B",
+          "text": "Upload files to Cloud Storage and use firewall rules to block all traffic except Cloud Storage IP ranges."
+        },
+        {
+          "letter": "C",
+          "text": "Upload files to Cloud Source Repositories and use Private Google Access."
+        },
+        {
+          "letter": "D",
+          "text": "Upload files to Cloud Source Repositories and use firewall rules for IP filtering."
+        }
+      ],
+      "explanation": "Private Google Access allows VMs that possess only internal (private) IP addresses to reach the public IP addresses of Google APIs and services (such as Cloud Storage) via Google's internal backbone. By uploading the software to a GCS bucket, you create a secure path to ingest software without ever exposing the VM to the public internet.",
+      "wrongOptions": "Option B: Manually managing firewall rules based on public IP ranges for Google services is brittle and complex compared to the native Private Google Access toggle.\n\nOptions C and D: Cloud Source Repositories is a version control service for source code, not a binary/object repository intended for installation files."
+    },
+    {
+      "id": 86,
+      "correct": [
+        "A"
+      ],
+      "question": "Your company is moving 75 TB of data into Google Cloud Storage and wants to follow Google recommended practices. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Move your data onto a Transfer Appliance. Use a Transfer Appliance rehydrator to decrypt the data into Cloud Storage."
+        },
+        {
+          "letter": "B",
+          "text": "Move your data onto a Transfer Appliance and use Cloud Dataprep to decrypt the data."
+        },
+        {
+          "letter": "C",
+          "text": "Install gsutil on each server and use resumable transfers."
+        },
+        {
+          "letter": "D",
+          "text": "Install gsutil on each server and use streaming transfers."
+        }
+      ],
+      "explanation": "The 10 TB to 100 TB range is the 'sweet spot' for the Transfer Appliance. Moving 75 TB over the public internet via gsutil would likely take weeks and consume significant bandwidth, risking job failure. The Transfer Appliance is a high-capacity storage server that you load locally and ship back to Google. The 'rehydrator' tool is then used to decrypt the data and place it into your GCS bucket.",
+      "wrongOptions": "Option B: Cloud Dataprep is an ETL tool for cleaning and exploring data — it has no functional role in the physical decryption or ingestion of appliance data.\n\nOptions C and D: While gsutil supports parallel and resumable uploads, the sheer volume (75 TB) makes a physical appliance the recommended path for efficiency and reliability."
+    },
+    {
+      "id": 87,
+      "correct": [
+        "A"
+      ],
+      "question": "You have an application deployed on GKE using a deployment named 'Echo-deployment' exposed via 'echoservice'. You need to perform an update with minimal downtime. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use kubectl set image deployment/Echo-deployment new-image."
+        },
+        {
+          "letter": "B",
+          "text": "Use the rolling update functionality of the instance group behind the cluster."
+        },
+        {
+          "letter": "C",
+          "text": "Use kubectl delete deployment followed by kubectl create."
+        },
+        {
+          "letter": "D",
+          "text": "Update the service YAML file with the new container image."
+        }
+      ],
+      "explanation": "Executing kubectl set image triggers a native Kubernetes rolling update. The Deployment controller orchestrates the rollout by spinning up new pods with the updated image and running readiness probes. Only after the new pods are verified as healthy does the controller terminate the old pods. This ensures that the application remains available to serve traffic throughout the update process.",
+      "wrongOptions": "Option B: Updates should be managed at the container orchestration layer (Kubernetes), not the virtual machine infrastructure layer.\n\nOption C: A 'recreate' strategy that causes an immediate service outage — all pods are deleted before new ones are created.\n\nOption D: A Kubernetes 'Service' is a networking abstraction (load balancer/DNS) — it does not manage container image versions or pod lifecycles."
+    },
+    {
+      "id": 88,
+      "correct": [
+        "C"
+      ],
+      "question": "Data is distributed over several Google Cloud projects, but all queries must be run through a single central project to consolidate costs. Users should be able to query the data but not edit it. How should you configure access?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Grant the group the BigQuery User role on the billing project and BigQuery Data Viewer on data projects."
+        },
+        {
+          "letter": "B",
+          "text": "Grant the group the BigQuery Data Viewer role on the billing project and BigQuery User on data projects."
+        },
+        {
+          "letter": "C",
+          "text": "Grant the group the BigQuery Job User role on the billing project and BigQuery Data Viewer on data projects."
+        },
+        {
+          "letter": "D",
+          "text": "Grant the group the BigQuery Data Viewer role on the billing project and BigQuery Job User on data projects."
+        }
+      ],
+      "explanation": "In BigQuery, query costs are charged to the project where the 'job' is created. To centralize billing, users need the bigquery.jobUser role in the billing project to run the queries. To access the underlying data in other projects without modification rights, they must have the bigquery.dataViewer role in each of the data projects. This enforces the principle of least privilege while meeting the cost-consolidation requirement.",
+      "wrongOptions": "Options A and B: Use the BigQuery User role, which is too broad — it allows the creation and deletion of datasets.\n\nOption D: Misplaces the roles — granting jobUser in the data projects would cause the data projects themselves to be billed for the compute resources consumed by the queries."
+    },
+    {
+      "id": 89,
+      "correct": [
+        "B"
+      ],
+      "question": "You want to allow external users, who may not have Google accounts, to upload images to Cloud Storage for a 24-hour period. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Protect the bucket with a password that expires after 24 hours."
+        },
+        {
+          "letter": "B",
+          "text": "Have users upload the images using a Signed URL that expires after 24 hours."
+        },
+        {
+          "letter": "C",
+          "text": "Use App Engine and authenticate users via Cloud Identity."
+        },
+        {
+          "letter": "D",
+          "text": "Create an App Engine application with a 24-hour timeout."
+        }
+      ],
+      "explanation": "Signed URLs provide time-limited, identity-agnostic access to Cloud Storage objects. The URL contains cryptographic credentials that authorize a specific action (like PUT for an upload). This is the ideal architectural choice for external users because it does not require them to have a Google account or be synchronized to a Cloud Identity directory.",
+      "wrongOptions": "Option A: Cloud Storage does not support password-based authentication for buckets.\n\nOptions C and D: Cloud Identity requires a managed Google identity, which contradicts the 'non-Google account' requirement of the question."
+    },
+    {
+      "id": 90,
+      "correct": [
+        "D"
+      ],
+      "question": "What is the architect's primary responsibility regarding ensuring a web application complies with GDPR on Google Cloud?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Ensure the application uses only native features to 'pass on' compliance."
+        },
+        {
+          "letter": "B",
+          "text": "Enable the GDPR compliance setting in the GCP Console."
+        },
+        {
+          "letter": "C",
+          "text": "Include Cloud Security Scanner in the test planning strategy."
+        },
+        {
+          "letter": "D",
+          "text": "Define a design for the security of data in the application that meets GDPR requirements."
+        }
+      ],
+      "explanation": "Under the Shared Responsibility Model, Google is responsible for the security of the cloud (infrastructure), while the customer is responsible for security in the cloud. Compliance is not a binary toggle or a feature that can be 'inherited' automatically. An architect must proactively design for data encryption, rigorous access controls, and data residency/retention policies that satisfy GDPR's legal requirements for protecting data subject rights.",
+      "wrongOptions": "Option A: A common misconception — while Google's infrastructure is certified, your application layer logic and data handling must also be compliant.\n\nOption B: There is no single 'GDPR compliance setting' in GCP — compliance requires architectural design decisions.\n\nOption C: Cloud Security Scanner is a tactical security measure for finding vulnerabilities (like XSS), but it does not address the broad legal and process requirements of GDPR (such as the right to be forgotten)."
+    },
+    {
+      "id": 91,
+      "correct": [
+        "D"
+      ],
+      "question": "You need to set up Microsoft SQL Server on GCP with no downtime in case of a data center (zonal) outage. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Configure a Cloud SQL instance with high availability."
+        },
+        {
+          "letter": "B",
+          "text": "Configure a Cloud Spanner instance."
+        },
+        {
+          "letter": "C",
+          "text": "Use Always On Availability Groups on Compute Engine with nodes in different subnets."
+        },
+        {
+          "letter": "D",
+          "text": "Set up SQL Server Always On Availability Groups with nodes in different zones."
+        }
+      ],
+      "explanation": "For self-managed SQL Server on Compute Engine, you must use Always On Availability Groups and Windows Failover Clustering. The critical architectural detail is the failure domain. In Google Cloud, subnets are regional (spanning multiple zones), but zones are the actual failure domains. Placing nodes in different subnets (Option C) does not guarantee they are in different data centers. You must explicitly place nodes in different zones to ensure availability if one data center goes offline.",
+      "wrongOptions": "Option A: Cloud SQL is a managed service for standard databases — it doesn't run Microsoft SQL Server in the same way, and the question implies a self-managed environment.\n\nOption B: Cloud Spanner is a different database engine entirely — not Microsoft SQL Server.\n\nOption C: The trap answer — subnets are regional abstractions and do not provide physical isolation from zonal outages."
+    },
+    {
+      "id": 92,
+      "correct": [
+        "B"
+      ],
+      "question": "The development team provided a Kubernetes deployment file. You have no infrastructure yet. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use gcloud to create the cluster and Deployment Manager for the application."
+        },
+        {
+          "letter": "B",
+          "text": "Use gcloud to create the Kubernetes cluster and kubectl to create the deployment."
+        },
+        {
+          "letter": "C",
+          "text": "Use kubectl to create the cluster and Deployment Manager for the app."
+        },
+        {
+          "letter": "D",
+          "text": "Use kubectl for both creating the cluster and the deployment."
+        }
+      ],
+      "explanation": "This tests the distinction between infrastructure provisioning and resource orchestration. The gcloud CLI is used to interact with the Google Cloud API to provision resources like the GKE cluster itself (nodes, networking). Once the cluster is provisioned, the kubectl tool is used to communicate with the Kubernetes API server to manage application resources (Deployments, Pods, Services).",
+      "wrongOptions": "Options C and D: kubectl is a container orchestration tool — it cannot provision Google Cloud infrastructure like virtual machines or VPCs.\n\nOption A: Non-standard — while Deployment Manager can manage GKE resources, kubectl is the standard tool for managing internal Kubernetes state."
+    },
+    {
+      "id": 93,
+      "correct": [
+        "A"
+      ],
+      "question": "You are designing an application used only during business hours and want to use a managed product that scales to zero to avoid costs when there is no activity. Which should you choose?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Cloud Functions"
+        },
+        {
+          "letter": "B",
+          "text": "Compute Engine"
+        },
+        {
+          "letter": "C",
+          "text": "Google Kubernetes Engine"
+        },
+        {
+          "letter": "D",
+          "text": "App Engine Flexible Environment"
+        }
+      ],
+      "explanation": "Cloud Functions is a truly serverless, event-driven compute service. Its billing model is strictly based on execution time — if there are no triggers (events), the service consumes no resources and incurs zero cost. This is the most efficient choice for intermittent workloads that only run during specific hours.",
+      "wrongOptions": "Options B (Compute Engine) and C (GKE): Incur costs for the underlying VMs or control plane regardless of whether traffic is being served.\n\nOption D (App Engine Flexible): Requires a minimum of one running instance, meaning it never truly scales to zero cost."
+    },
+    {
+      "id": 94,
+      "correct": [
+        "A"
+      ],
+      "question": "You need to retrieve several root entities for which you have the identifiers. You want to minimize operational overhead. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create the key object for each entity and run a batch get operation."
+        },
+        {
+          "letter": "B",
+          "text": "Run multiple get operations (one for each entity)."
+        },
+        {
+          "letter": "C",
+          "text": "Run a batch query operation using identifier filters."
+        },
+        {
+          "letter": "D",
+          "text": "Run multiple query operations using identifier filters."
+        }
+      ],
+      "explanation": "Retrieving data by a known key is a 'Get' operation — a direct lookup. To minimize RPC (Remote Procedure Call) overhead, a Batch Get should be used. This allows the application to retrieve multiple entities in a single network call, reducing latency and improving overall performance.",
+      "wrongOptions": "Option B: Increases overhead by making multiple separate network calls — one round-trip per entity.\n\nOptions C and D: Queries are more computationally expensive than direct key-based lookups because they require an index scan. Since you already have the identifiers, using Get (not Query) is the correct and more efficient approach."
+    },
+    {
+      "id": 95,
+      "correct": [
+        "A"
+      ],
+      "question": "You want to upload files to Cloud Storage using gsutil and encrypt them using customer-supplied encryption keys. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Supply the encryption key in a .boto configuration file and use gsutil."
+        },
+        {
+          "letter": "B",
+          "text": "Supply the encryption key using gcloud config."
+        },
+        {
+          "letter": "C",
+          "text": "Use gsutil with the --encryption-key flag."
+        },
+        {
+          "letter": "D",
+          "text": "Use gsutil to create a bucket with an --encryption-key flag."
+        }
+      ],
+      "explanation": "For gsutil to utilize Customer-Supplied Encryption Keys (CSEK), you must provide the key details in the .boto configuration file on the local machine where gsutil is running. gsutil is an independent Python-based tool that relies on this specific configuration file to handle security and transport settings.",
+      "wrongOptions": "Option B: gcloud config manages settings for the Google Cloud SDK, not the secret keys used by the gsutil utility.\n\nOptions C and D: gsutil does not support an inline --encryption-key flag for security reasons — to prevent keys from appearing in command history or process lists."
+    },
+    {
+      "id": 96,
+      "correct": [
+        "B"
+      ],
+      "question": "A customer needs to capture and monitor multiple GBs of real-time KPIs from game servers with low latency. How should they do this?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Store time-series data in Bigtable and view it in Data Studio."
+        },
+        {
+          "letter": "B",
+          "text": "Output custom metrics to Cloud Monitoring and create a dashboard."
+        },
+        {
+          "letter": "C",
+          "text": "Schedule BigQuery load jobs every 10 minutes."
+        },
+        {
+          "letter": "D",
+          "text": "Insert KPIs into Datastore and use Cloud Datalab."
+        }
+      ],
+      "explanation": "Cloud Monitoring (formerly Stackdriver) is purpose-built for real-time observability. By sending custom metrics directly to the Monitoring API, you achieve low-latency ingestion and visualization. This is the standard architectural path for real-time operational dashboards.",
+      "wrongOptions": "Option A: Bigtable + Data Studio is better suited for historical analysis, not real-time operational monitoring dashboards.\n\nOption C: A batch approach that introduces a 10-minute lag, which fails the real-time/low-latency requirement.\n\nOption D: Datastore is for transactional data and Datalab is a coding environment — neither is optimized for real-time KPI monitoring."
+    },
+    {
+      "id": 97,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company wants to start using Google Cloud but retain their on-premises Active Directory for identity management. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use the Admin Directory API to authenticate against AD."
+        },
+        {
+          "letter": "B",
+          "text": "Use Google Cloud Directory Sync (GCDS) and configure SAML SSO."
+        },
+        {
+          "letter": "C",
+          "text": "Use Identity-Aware Proxy (IAP)."
+        },
+        {
+          "letter": "D",
+          "text": "Create an AD replica on Compute Engine using GCDS."
+        }
+      ],
+      "explanation": "This is the standard enterprise identity pattern. Google Cloud Directory Sync (GCDS) provides the synchronization layer, mirroring users/groups from AD into Cloud Identity. SAML SSO provides the authentication layer, redirecting login requests to your on-premises AD so users can use their corporate credentials.",
+      "wrongOptions": "Option A: The Admin Directory API is for managing Google Workspace users programmatically — not for authenticating against an on-premises Active Directory.\n\nOption C: Identity-Aware Proxy is for protecting specific applications, not for general identity integration.\n\nOption D: A technical error — GCDS synchronizes objects (users/groups) but cannot replicate the Active Directory domain controller itself."
+    },
+    {
+      "id": 98,
+      "correct": [
+        "B"
+      ],
+      "question": "GKE pods are restarting every 2 seconds, and the application writes logs to standard output. How can you find the cause?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Review the logs for each Compute Engine instance (node)."
+        },
+        {
+          "letter": "B",
+          "text": "Review the Cloud Monitoring (Stackdriver) logs for the specific GKE container."
+        },
+        {
+          "letter": "C",
+          "text": "Connect to a container in one of the pods to read the logs."
+        },
+        {
+          "letter": "D",
+          "text": "Review the serial port logs for the GKE nodes."
+        }
+      ],
+      "explanation": "In GKE, the Ops Agent (or legacy Fluentd agent) automatically collects logs from a container's stdout and stderr and sends them to Cloud Logging (formerly Stackdriver). Because these logs are persisted centrally, they remain available for analysis even after the pod has crashed, allowing you to debug the failure that occurred immediately before the restart.",
+      "wrongOptions": "Options A and D: Host-level logs will not contain application-level stack traces or errors from within containers.\n\nOption C: Impossible — a pod in a 2-second crash loop does not remain alive long enough for a kubectl exec or SSH connection to be established."
+    },
+    {
+      "id": 99,
+      "correct": [
+        "D"
+      ],
+      "question": "You want to introduce high availability (HA) to a single-zone Cloud SQL instance. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a read replica in a different region."
+        },
+        {
+          "letter": "B",
+          "text": "Create a failover replica in a different region."
+        },
+        {
+          "letter": "C",
+          "text": "Create a read replica in a different zone."
+        },
+        {
+          "letter": "D",
+          "text": "Create a failover replica in a different zone in the same region."
+        }
+      ],
+      "explanation": "HA for Cloud SQL is defined by having a primary instance and a standby failover replica in different zones within the same region. Cloud SQL uses synchronous replication to the standby — if the primary zone fails, an automatic failover is triggered to ensure business continuity with minimal RTO.",
+      "wrongOptions": "Options A and B: Cross-region strategies are for disaster recovery (DR), not for standard High Availability. They introduce higher latency and different recovery objectives.\n\nOption C: A read replica is used for read-scaling only — it does not support the automated promotion required for High Availability."
+    },
+    {
+      "id": 100,
+      "correct": [
+        "C"
+      ],
+      "question": "A stateless application on a single Compute Engine instance is slow during peak hours. You need to optimize performance. What is the correct procedure?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a snapshot → Create template → Create autoscaled MIG."
+        },
+        {
+          "letter": "B",
+          "text": "Create a snapshot → Create custom image → Create autoscaled MIG."
+        },
+        {
+          "letter": "C",
+          "text": "Create a custom image → Create instance template → Create autoscaled MIG."
+        },
+        {
+          "letter": "D",
+          "text": "Create instance template → Create custom image → Create autoscaled MIG."
+        }
+      ],
+      "explanation": "To transition from a single server to a scalable system, you must follow this logical architectural sequence:\n\n1. Custom Image: Create a 'Golden Image' that includes the OS and application.\n2. Instance Template: Use the image to define a blueprint (machine type, image, service account).\n3. Managed Instance Group (MIG): Create the group using the template and enable Autoscaling to horizontally scale instances based on CPU or load.",
+      "wrongOptions": "Options A and B: Use Snapshots as the starting point. Snapshots are for backup/point-in-time recovery, not for creating the boot images used by instance templates.\n\nOption D: Has a flawed sequence — you cannot create an image from a template. The template is a configuration that references an existing image, so the image must exist first."
+    }
+  ]
+}

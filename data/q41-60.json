@@ -1,0 +1,565 @@
+{
+  "questions": [
+    {
+      "id": 41,
+      "correct": [
+        "C",
+        "E"
+      ],
+      "question": "A developer on your team deployed an application in Google Container Engine (GKE) using a Dockerfile that results in long deployment times. You want to optimize this Dockerfile for faster deployment times without adversely affecting the application's functionality. The current Dockerfile uses a large Ubuntu base image, and the source code is copied into the image before package dependencies are installed. Which two actions should you take? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Remove Python after running pip"
+        },
+        {
+          "letter": "B",
+          "text": "Remove dependencies from requirements.txt"
+        },
+        {
+          "letter": "C",
+          "text": "Use a slimmed-down base image like Alpine Linux"
+        },
+        {
+          "letter": "D",
+          "text": "Use larger machine types for your Google Container Engine node pools"
+        },
+        {
+          "letter": "E",
+          "text": "Copy the source after the package dependencies are installed"
+        }
+      ],
+      "explanation": "Option C: Switching to a smaller base image like Alpine Linux dramatically reduces the final image size. Smaller images are faster to upload to a registry and faster for GKE nodes to pull over the network, which directly reduces deployment time.\n\nOption E: Docker builds images in layers and uses caching for steps that haven't changed. In the original configuration, copying source code before installing dependencies is inefficient because any minor code change invalidates the cache for all subsequent steps (including the slow dependency installation). By installing dependencies first, that layer remains cached. When only application code changes, the slow installation step is skipped, making builds significantly faster.",
+      "wrongOptions": "Options A and B: These would break the application. The application requires the Python runtime and its dependencies to function; the goal is to optimize the build process, not remove required functionality.\n\nOption D: While larger node types might improve application performance post-deployment, they do not speed up the process of building the container image or pulling it from the registry."
+    },
+    {
+      "id": 42,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company has many distributed applications that need to connect to a database backend. The chief architect wants to store and share the database credentials securely. She also wants to ensure there are no unexpected logins and receive alerts on suspicious login activity. What solution would you recommend?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Store the variables as environment variables and check the audit log of the database for suspicious login"
+        },
+        {
+          "letter": "B",
+          "text": "Use Secret Manager to store credentials, enable audit logging, and check the log for any suspicious login"
+        },
+        {
+          "letter": "C",
+          "text": "Use Cloud KMS to store the keys and check the audit log of the database for suspicious login"
+        },
+        {
+          "letter": "D",
+          "text": "Use Cloud KMS to store the keys and rotate the keys periodically to avoid any suspicious login"
+        }
+      ],
+      "explanation": "Option B addresses both requirements. Secret Manager is Google Cloud's purpose-built vault for sensitive data like database passwords, providing encryption, access control, and versioning. Enabling Cloud Audit Logs creates a detailed record of who accessed the secret and when. You can then use Cloud Logging and Monitoring to set up alerts for suspicious activity.",
+      "wrongOptions": "Option A: Storing sensitive credentials as environment variables is a poor security practice — they can be easily exposed in logs or system information.\n\nOptions C and D: Cloud KMS is designed for managing encryption keys, not for storing actual secrets like passwords. While KMS can encrypt a password, Secret Manager is the correct tool for secret lifecycle management. Additionally, rotating keys (Option D) does not fulfill the requirement for monitoring and alerting on suspicious logins."
+    },
+    {
+      "id": 43,
+      "correct": [
+        "D"
+      ],
+      "question": "A solution is producing performance bugs in production that were not observed in staging or test environments. You want to adjust your test and deployment procedures to avoid this problem in the future. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Deploy fewer changes to production"
+        },
+        {
+          "letter": "B",
+          "text": "Deploy smaller changes to production"
+        },
+        {
+          "letter": "C",
+          "text": "Increase the load on your test and staging environments"
+        },
+        {
+          "letter": "D",
+          "text": "Deploy changes to a small subset of users before rolling out to production"
+        }
+      ],
+      "explanation": "Option D describes a Canary Release strategy. Test and staging environments can never perfectly replicate the unique conditions of production, such as real-world user traffic and data patterns. By releasing a change to a small, controlled subset of real users first, you can monitor performance closely. If a bug appears, it can be rolled back with minimal impact. If the change is stable, it can be gradually rolled out to the entire user base.",
+      "wrongOptions": "Option A: Deploying fewer changes doesn't solve the root cause — bugs can still happen regardless of the frequency of changes.\n\nOption B: A good practice for identifying the source of a bug, but it does not prevent a bug from affecting the entire user base once deployed.\n\nOption C: A useful practice but insufficient, as synthetic load cannot perfectly simulate the randomness and complexity of real-world user behavior."
+    },
+    {
+      "id": 44,
+      "correct": [
+        "D"
+      ],
+      "question": "A small number of API requests to your microservices-based application take a very long time. Each request traverses many services, and you need to identify which specific service takes the longest in these cases. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Set timeouts on your application so that you can fail requests faster"
+        },
+        {
+          "letter": "B",
+          "text": "Send custom metrics for each of your requests to Stackdriver Monitoring"
+        },
+        {
+          "letter": "C",
+          "text": "Use Stackdriver Monitoring to look for insights that show when your API latencies are high"
+        },
+        {
+          "letter": "D",
+          "text": "Instrument your application with Stackdriver Trace in order to break down the request latencies at each microservice"
+        }
+      ],
+      "explanation": "Stackdriver Trace (now Cloud Trace) is designed for distributed tracing in microservices architectures. By instrumenting the application with the Trace library, it captures the full path of individual requests across services. It provides a detailed 'waterfall' chart showing the latency contributed by each service, allowing you to pinpoint the bottleneck.",
+      "wrongOptions": "Option A: Setting timeouts doesn't find the problem — it just fails the request faster, which degrades the user experience without resolving the root cause.\n\nOptions B and C: Stackdriver Monitoring is designed for aggregate metrics (e.g., average response time over thousands of requests). It can identify that the API is slow overall, but it cannot provide a breakdown of the journey of a single slow request across multiple services."
+    },
+    {
+      "id": 45,
+      "correct": [
+        "C"
+      ],
+      "question": "A financial data company wants to share a specific dataset with clients utilizing GCP. The requirements are: clients should have read-only access and cannot modify data; different clients subscribe to different parts of the data; the company does not want to share the entire dataset with every client. How should the company design the offering?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create different datasets for different clients and store them in a bucket; share each dataset as a read-only object with respective clients"
+        },
+        {
+          "letter": "B",
+          "text": "Create a bucket for each client with uniform read access; share the datasets in respective buckets"
+        },
+        {
+          "letter": "C",
+          "text": "Load the dataset into BigQuery, create views for different clients, and give access to views to respective clients"
+        },
+        {
+          "letter": "D",
+          "text": "Register as a partner on Google Cloud Marketplace and upload the dataset as a solution"
+        }
+      ],
+      "explanation": "Option C is the most efficient and secure method. By loading the data into BigQuery and creating Authorized Views, the company can manage a single master copy of the data. Each view uses a SQL query to filter specific rows or columns relevant to a particular client. Clients are granted read-only access to their specific view, ensuring they see only their data without modifying the source.",
+      "wrongOptions": "Options A and B: These involve creating and synchronizing multiple copies of the data, which is an administrative nightmare and leads to data inconsistency.\n\nOption D: The Cloud Marketplace is intended for selling datasets to a broad audience; it is not designed for managing fine-grained, client-specific access permissions."
+    },
+    {
+      "id": 46,
+      "correct": [
+        "D"
+      ],
+      "question": "During a high-traffic portion of the day, one of your relational databases crashes, but the replica is never promoted to a master. You want to avoid this in the future. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use a different database"
+        },
+        {
+          "letter": "B",
+          "text": "Choose larger instances for your database"
+        },
+        {
+          "letter": "C",
+          "text": "Create snapshots of your database more regularly"
+        },
+        {
+          "letter": "D",
+          "text": "Implement routinely scheduled failovers of your databases"
+        }
+      ],
+      "explanation": "High availability systems only work if the failover mechanism is reliable. The best way to ensure a replica will be promoted during a real disaster is to routinely schedule failovers in a controlled environment. This allows you to identify and fix configuration or process issues before an actual outage occurs.",
+      "wrongOptions": "Option A: The type of database isn't the problem — the issue is the failure of the promotion process.\n\nOption B: Larger instances might improve stability but do not address the failure of the automated promotion mechanism.\n\nOption C: Snapshots are for data recovery/backup, not high availability. They do not help keep a service online during a crash."
+    },
+    {
+      "id": 47,
+      "correct": [
+        "A"
+      ],
+      "question": "Your company is building a backup replica of an on-premises 4 TB PostgreSQL database on GCP. Large updates are frequent, and replication requires private address space communication. Which networking approach should you use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Google Cloud Dedicated Interconnect"
+        },
+        {
+          "letter": "B",
+          "text": "Google Cloud VPN connected to the data center network"
+        },
+        {
+          "letter": "C",
+          "text": "A NAT and TLS translation gateway installed on-premises"
+        },
+        {
+          "letter": "D",
+          "text": "A Google Compute Engine instance with a VPN server installed connected to the data center network"
+        }
+      ],
+      "explanation": "Replicating a 4 TB database with frequent large updates requires high, consistent, and guaranteed bandwidth. Dedicated Interconnect provides a direct physical connection between the on-premises data center and Google's network. It operates within a private address space and offers the performance necessary for large-scale data replication.",
+      "wrongOptions": "Options B and D: Cloud VPN (or a self-managed VPN) operates over the public internet. Internet performance is unpredictable, and standard VPN connections are generally insufficient for the high bandwidth required for a 4 TB database with frequent updates.\n\nOption C: An overly complex and non-standard approach that does not address the fundamental need for a high-bandwidth, private physical link."
+    },
+    {
+      "id": 48,
+      "correct": [
+        "A",
+        "C"
+      ],
+      "question": "An e-commerce website serves customers in multiple geographic regions and uses Cloud CDN. To reduce CDN costs—which are based on data transfer—without impacting the user experience, which two steps should you take? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Enable caching for all common images and non-personalized content"
+        },
+        {
+          "letter": "B",
+          "text": "Enable caching for all content on the e-commerce site"
+        },
+        {
+          "letter": "C",
+          "text": "Optimize images by resizing and formatting them appropriately"
+        },
+        {
+          "letter": "D",
+          "text": "Use high-resolution images for all content and use multi-region cloud storage"
+        }
+      ],
+      "explanation": "Option A: CDNs save costs by serving static content from edge locations rather than the origin server. Caching common images and non-personalized content ensures that the majority of traffic is handled at the edge, reducing origin egress costs.\n\nOption C: Image files are often the largest part of a webpage. By resizing and formatting images (e.g., using WebP), you reduce the file size. Smaller files mean less data is transferred through the CDN, leading to a direct reduction in costs.",
+      "wrongOptions": "Option B: Dangerous — caching personalized content (like shopping carts or account details) can result in a security breach where one user sees another's private information.\n\nOption D: High-resolution images result in larger file sizes, which increases the amount of data transferred and raises CDN costs — the opposite of the goal."
+    },
+    {
+      "id": 49,
+      "correct": [
+        "B"
+      ],
+      "question": "Auditors visit your team every 12 months to review all Google Cloud IAM policy changes. You want to streamline and expedite this audit process. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create custom Google Stackdriver alerts and send them to the auditor"
+        },
+        {
+          "letter": "B",
+          "text": "Enable logging export to Google BigQuery and use ACLs and views to scope the data shared with the auditor"
+        },
+        {
+          "letter": "C",
+          "text": "Use Cloud Functions to transfer log entries to Google Cloud SQL and use ACLs and views"
+        },
+        {
+          "letter": "D",
+          "text": "Enable Google Cloud Storage (GCS) log export to audit logs into a GCS bucket and delegate access"
+        }
+      ],
+      "explanation": "This is a two-part best practice. First, exporting logs to BigQuery allows for the storage and rapid analysis of 12 months of historical data using SQL. Second, using ACLs and Authorized Views ensures that auditors only see the specific IAM policy changes they are authorized to review, providing a secure and efficient audit interface.",
+      "wrongOptions": "Option A: Alerts are for real-time notification, not for historical analysis of changes over a year.\n\nOption C: Cloud SQL is not optimized for large-scale log analysis compared to BigQuery, and using Cloud Functions adds unnecessary complexity.\n\nOption D: While GCS can store the logs, querying and analyzing raw files in a bucket is much slower and more difficult than using a data warehouse like BigQuery."
+    },
+    {
+      "id": 50,
+      "correct": [
+        "B"
+      ],
+      "question": "An organization is developing a global multiplayer game and requires a database that can consistently capture player statistics. The database must serve leaderboards and return consistent rankings across players all over the world with almost unlimited growth. Which Google Cloud product should be chosen?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Firestore"
+        },
+        {
+          "letter": "B",
+          "text": "Cloud Spanner"
+        },
+        {
+          "letter": "C",
+          "text": "Cloud SQL"
+        },
+        {
+          "letter": "D",
+          "text": "Bare Metal"
+        }
+      ],
+      "explanation": "Cloud Spanner is the only Google Cloud service that provides a globally distributed relational database with global strong consistency. This ensures that every player, regardless of their location, sees the exact same rankings at the same time. It is also designed for horizontal scaling, making it capable of handling \"unlimited\" growth.",
+      "wrongOptions": "Option A (Firestore): Does not offer the same level of global transactional consistency across regions as Spanner.\n\nOption C (Cloud SQL): A regional service — it cannot scale horizontally across the globe or provide global strong consistency.\n\nOption D (Bare Metal): Managing a globally consistent, infinitely scalable database on Bare Metal would be an extremely complex engineering task that managed services like Spanner are designed to solve."
+    },
+    {
+      "id": 51,
+      "correct": [
+        "C"
+      ],
+      "question": "You are designing a large distributed application with 30 microservices. Each service needs to connect to a database backend. You want to store the credentials securely. Where should you store them?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "In the source code"
+        },
+        {
+          "letter": "B",
+          "text": "In an environment variable"
+        },
+        {
+          "letter": "C",
+          "text": "In a secret management system"
+        },
+        {
+          "letter": "D",
+          "text": "In a config file that has restricted access through ACLs"
+        }
+      ],
+      "explanation": "A dedicated secret management system (like Google Cloud Secret Manager) is the security best practice. It stores credentials in an encrypted, highly available vault with fine-grained IAM access control. Services fetch credentials securely at runtime via an API, meaning secrets are never stored in plain text within code or configuration files.",
+      "wrongOptions": "Option A: A major security anti-pattern — hard-coding secrets makes them accessible to anyone with code access.\n\nOption B: Environment variables can be leaked via logs or compromised processes.\n\nOption D: An improvement but still stores secrets on a file system, which is harder to manage and rotate compared to a centralized secret manager."
+    },
+    {
+      "id": 52,
+      "correct": [
+        "C"
+      ],
+      "question": "You have created several preemptible Linux virtual machine instances using Google Compute Engine. You want to properly shut down your application before the virtual machines are preempted. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a shutdown script named k99.shutdown in the /etc/rc.6.d/ directory"
+        },
+        {
+          "letter": "B",
+          "text": "Create a shutdown script registered as a Zinit service in Linux and configure a Stackdriver endpoint"
+        },
+        {
+          "letter": "C",
+          "text": "Create a shutdown script and use it as the value for a new metadata entry with the key shutdown-script"
+        },
+        {
+          "letter": "D",
+          "text": "Create a shutdown script registered as a Zinit service and use the instances add-metadata command with the key shutdown-script-url"
+        }
+      ],
+      "explanation": "Google Compute Engine provides a specific mechanism for graceful shutdowns called the shutdown-script metadata key. When GCE is about to preempt an instance, it sends a 30-second warning signal. During this window, it automatically executes the script provided in the shutdown-script metadata, giving the application time to save state and exit cleanly.",
+      "wrongOptions": "Option A: A standard Linux method, but it is not the cloud-native trigger Google uses for preemption events.\n\nOptions B and D: Involve unnecessary complexity (Zinit services). Additionally, Option D uses an incorrect metadata key (shutdown-script-url instead of shutdown-script)."
+    },
+    {
+      "id": 53,
+      "correct": [
+        "D"
+      ],
+      "question": "Which VMware product is built around Kubernetes and can build, orchestrate, and manage containers across multiple cloud providers with a single control plane?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "OpenShift"
+        },
+        {
+          "letter": "B",
+          "text": "OpenStack"
+        },
+        {
+          "letter": "C",
+          "text": "vSphere"
+        },
+        {
+          "letter": "D",
+          "text": "Tanzu"
+        }
+      ],
+      "explanation": "VMware Tanzu is the portfolio of products specifically designed by VMware to build, run, and manage modern applications. It is built on Kubernetes and provides a unified control plane for managing Kubernetes clusters across on-premises data centers and various public cloud providers.",
+      "wrongOptions": "Option A (OpenShift): A Red Hat product, not a VMware product.\n\nOption B (OpenStack): An open-source platform for building private clouds, not specifically a VMware product for multi-cloud Kubernetes.\n\nOption C (vSphere): VMware's core virtualization platform for virtual machines, but not the specific product described for multi-cloud Kubernetes orchestration."
+    },
+    {
+      "id": 54,
+      "correct": [
+        "D"
+      ],
+      "question": "Your organization has a three-tier web application (Web, API, and Database) where each tier scales independently. Network traffic should flow from the Web tier to the API tier, and from the API tier to the Database tier. Traffic should NOT flow directly between the Web and Database tiers. How should you configure the network?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Add each tier to a different subnetwork"
+        },
+        {
+          "letter": "B",
+          "text": "Set up software-based firewalls on individual VMs"
+        },
+        {
+          "letter": "C",
+          "text": "Add tags to each tier and set up routes to allow the desired traffic flow"
+        },
+        {
+          "letter": "D",
+          "text": "Add tags to each tier and set up firewall rules to allow the desired traffic flow"
+        }
+      ],
+      "explanation": "This is the standard GCP method for network segmentation. By applying unique network tags to the VMs in each tier, you can create VPC firewall rules that explicitly allow traffic between specific tags (e.g., Allow from 'Web-tag' to 'API-tag'). Because VPC firewalls implicitly deny any traffic not allowed by a rule, the Web-to-Database traffic will be blocked automatically.",
+      "wrongOptions": "Option A: By default, all subnets in a VPC can communicate — subnets do not provide security isolation without firewall rules.\n\nOption B: Managing individual software firewalls is labor-intensive and error-prone compared to centralized VPC firewalls.\n\nOption C: Routes direct traffic to a destination; they do not act as security guards to allow or deny traffic."
+    },
+    {
+      "id": 55,
+      "correct": [
+        "C"
+      ],
+      "question": "How does Google Cloud suggest that organizations use third-party identity providers to enable users to access Google Cloud with their corporate credentials?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "By delegating responsibility to service accounts and groups"
+        },
+        {
+          "letter": "B",
+          "text": "By implementing the principle of least privilege"
+        },
+        {
+          "letter": "C",
+          "text": "By federating third-party identity providers with Google Cloud"
+        },
+        {
+          "letter": "D",
+          "text": "By migrating unmanaged accounts to personal accounts"
+        }
+      ],
+      "explanation": "Identity Federation establishes a trust relationship between an organization's third-party identity provider (like Active Directory or Okta) and Google Cloud. This allows users to sign in using their existing corporate credentials (SSO), providing a seamless experience and centralized management.",
+      "wrongOptions": "Option A: About how permissions are granted to applications or groups, not how users are authenticated.\n\nOption B: A security principle for permissions, not a technical mechanism for integration with an identity provider.\n\nOption D: An administrative task for cleaning up consumer accounts; it does not solve the long-term authentication requirement."
+    },
+    {
+      "id": 56,
+      "correct": [
+        "A",
+        "C",
+        "E"
+      ],
+      "question": "A new Linux kernel module was installed on batch servers in GCE to speed up nightly runs, but 50% of the servers failed two days later. You need to collect details on the failure for the development team. Which three actions should you take? (Choose three)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use Stackdriver Logging to search for the module log entries"
+        },
+        {
+          "letter": "B",
+          "text": "Read the debug GCE activity log using the API or Cloud Console"
+        },
+        {
+          "letter": "C",
+          "text": "Use Cloud Console to connect to the serial console and observe the logs"
+        },
+        {
+          "letter": "D",
+          "text": "Identify whether a live migration event occurred using the activity log"
+        },
+        {
+          "letter": "E",
+          "text": "Adjust the Google Stackdriver timeline to match the failure time and observe server metrics"
+        },
+        {
+          "letter": "F",
+          "text": "Export a debug VM into an image and run it on a local server"
+        }
+      ],
+      "explanation": "Option A: Cloud Logging collects system-level logs. If the module or kernel crashed, error messages would likely be recorded here.\n\nOption C: The serial console is vital for troubleshooting kernel issues. It displays low-level messages (like kernel panics) that are visible even if the VM is unresponsive via the network.\n\nOption E: Observing performance metrics (CPU, memory, disk) in Cloud Monitoring during the exact time of the failure can reveal resource anomalies caused by the new module.",
+      "wrongOptions": "Option B: Activity logs track administrative actions (like 'Start VM'), not internal OS logs.\n\nOption D: While live migration is a feature, it is unlikely to be the primary cause of a specific kernel module failure.\n\nOption F: Exporting a VM for local debugging is extremely slow and inefficient compared to using cloud-native tools."
+    },
+    {
+      "id": 57,
+      "correct": [
+        "B"
+      ],
+      "question": "A fintech startup stores customer card details in Cloud Datastore. Management wants to reduce the risk of data breaches from ex-employees. What solution would you use to secure the data?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Cloud IDS"
+        },
+        {
+          "letter": "B",
+          "text": "VPC Service Controls"
+        },
+        {
+          "letter": "C",
+          "text": "Cloud Armor"
+        },
+        {
+          "letter": "D",
+          "text": "Event Threat Detection"
+        }
+      ],
+      "explanation": "VPC Service Controls allows you to create a virtual security perimeter around sensitive services like Cloud Datastore. This perimeter prevents data from being accessed from outside the authorized network, even if an individual (like an ex-employee) still has valid IAM permissions. This is the primary tool for preventing data exfiltration.",
+      "wrongOptions": "Option A (Cloud IDS): For monitoring network traffic for threats, not for preventing authorized users from accessing databases.\n\nOption C (Cloud Armor): A WAF/DDoS service for external web traffic — it does not control internal access to Datastore.\n\nOption D (Event Threat Detection): A detection tool that alerts you after a suspicious event has occurred, whereas VPC Service Controls actively prevents the unauthorized access."
+    },
+    {
+      "id": 58,
+      "correct": [
+        "A",
+        "E"
+      ],
+      "question": "Your company wants to archive 100 TB of log data for long-term disaster recovery backup while also testing analytics features available in the cloud. Which two steps should you take? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Load logs into Google BigQuery"
+        },
+        {
+          "letter": "B",
+          "text": "Load logs into Google Cloud SQL"
+        },
+        {
+          "letter": "C",
+          "text": "Import logs into Google Stackdriver"
+        },
+        {
+          "letter": "D",
+          "text": "Insert logs into Google Cloud Bigtable"
+        },
+        {
+          "letter": "E",
+          "text": "Upload log files into Google Cloud Storage"
+        }
+      ],
+      "explanation": "Option E: Google Cloud Storage (GCS) is the ideal service for low-cost, high-durability, long-term archival. It can store virtually unlimited amounts of data, fulfilling the disaster recovery requirement.\n\nOption A: BigQuery is the correct service for analytics. It is a serverless data warehouse designed for running complex SQL queries on massive datasets (like 100 TB of logs) very quickly.",
+      "wrongOptions": "Option B (Cloud SQL): Not designed for 100 TB analytical workloads.\n\nOption C (Cloud Logging/Stackdriver): For managing recent logs, not long-term petabyte-scale archival.\n\nOption D (Bigtable): For high-throughput real-time applications, not for analytical SQL queries on archives."
+    },
+    {
+      "id": 59,
+      "correct": [
+        "D"
+      ],
+      "question": "You need to implement a solution for live troubleshooting of microservices in production with minimum business impact. What is the best approach?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Install log agents at every microservice and forward logs to Cloud Logging"
+        },
+        {
+          "letter": "B",
+          "text": "Use the Cloud Logging SDK to ingest log data asynchronously"
+        },
+        {
+          "letter": "C",
+          "text": "Enable Cloud Debugger API and add support at every microservice with snapshots and log points"
+        },
+        {
+          "letter": "D",
+          "text": "Enable Cloud Debugger API and add support at every microservice in canary mode"
+        }
+      ],
+      "explanation": "Cloud Debugger allows developers to inspect the state of a running application (using snapshots and logpoints) without stopping it or impacting performance. Critically, using it in canary mode ensures that the tool is first tested on a small subset of instances, fulfilling the requirement for \"minimum business impact\" and safe production troubleshooting.",
+      "wrongOptions": "Options A and B: Logging only shows events that have already happened — it doesn't allow for live inspection of variables at a specific line of code.\n\nOption C: The right tool, but it lacks the \"canary mode\" safety strategy, which is the best practice for introducing such tools to a production environment."
+    },
+    {
+      "id": 60,
+      "correct": [
+        "B"
+      ],
+      "question": "A code change in your continuous deployment pipeline has negatively affected a key performance indicator. You are not sure how to fix it, and the investigation could take a week. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Log in to a server and iterate on the fix locally"
+        },
+        {
+          "letter": "B",
+          "text": "Revert the source code change and rerun the deployment pipeline"
+        },
+        {
+          "letter": "C",
+          "text": "Log into the servers and manually swap in the previous code"
+        },
+        {
+          "letter": "D",
+          "text": "Change the instance group template to the previous one and delete all instances"
+        }
+      ],
+      "explanation": "This follows DevOps best practices for incident recovery. To restore service stability quickly, you should revert the change in the source repository (e.g., git revert) and rerun the pipeline. This ensures the production environment is returned to a known good state using the same automated, safe process used for all deployments.",
+      "wrongOptions": "Options A and C: Anti-patterns. Manually changing code on production servers bypasses safety checks and creates 'configuration drift,' leading to an inconsistent and unmanageable environment.\n\nOption D: Deleting all instances causes a major outage. A proper rolling update would replace instances gracefully without service interruption."
+    }
+  ]
+}

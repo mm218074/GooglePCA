@@ -1,0 +1,573 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "correct": [
+        "D"
+      ],
+      "question": "The development team has submitted a ticket for a web application that is crashing due to high CPU utilization. The network admin has suggested creating a managed instance group to handle the load. Which suggested configuration below could solve the problem?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a managed instance group with an autoscaling policy based on load balancing serving capacity."
+        },
+        {
+          "letter": "B",
+          "text": "Create a managed instance group with a cluster autoscaler with a fixed minimum and a maximum number of instances."
+        },
+        {
+          "letter": "C",
+          "text": "Create a managed instance group with an autohealing policy that attempts to recreate the crashed instance."
+        },
+        {
+          "letter": "D",
+          "text": "Create a managed instance group with an autoscaling policy based on CPU utilization."
+        }
+      ],
+      "explanation": "The root cause of this failure is explicitly identified as high CPU utilization. To resolve this, the architecture requires a proactive mechanism to add virtual machines when the CPU load increases, thereby preventing an overload before the application crashes.\n\nOption D is the most direct and effective solution. By setting an autoscaling policy based on CPU utilization—for instance, targeting a 60% average usage—the system will automatically add new instances as the load grows. This distributes the workload across more machines, reducing the CPU load on each individual instance and preventing them from becoming overloaded.",
+      "wrongOptions": "Option A: While scaling based on load balancing serving capacity is related to traffic, scaling by the specific CPU metric is more precise for this scenario since CPU is the stated cause of the crashes.\n\nOption B: \"Cluster autoscaler\" is a term specific to Google Kubernetes Engine (GKE) nodes and does not apply to standard Compute Engine managed instance groups.\n\nOption C: Autohealing is a reactive mechanism that only replaces instances after they have already crashed, which fails to prevent downtime in the first place."
+    },
+    {
+      "id": 2,
+      "correct": [
+        "C"
+      ],
+      "question": "An application development team believes their current logging tool will not meet their needs for their new cloud-based product. They want a better tool to capture errors and help them analyze their historical log data. You want to help them find a solution that meets their needs. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Direct them to download and install the Google Stack Driver logging agent."
+        },
+        {
+          "letter": "B",
+          "text": "Send them a list of online resources about logging best practices."
+        },
+        {
+          "letter": "C",
+          "text": "Help them define their requirements and assess viable logging tools."
+        },
+        {
+          "letter": "D",
+          "text": "Help them upgrade their current tool to take advantage of any new features."
+        }
+      ],
+      "explanation": "In the Professional Cloud Architect exam, you must often assume the role of a consultant or architect. The objective is to guide a team to the best solution rather than jumping to a specific product immediately. Defining requirements is the critical first step in the architectural process. This involves clarifying the specific needs of the team, such as the types of logs to be analyzed, the required duration of log storage, the necessary speed of alerting, the budget, and any required integrations. Only after establishing these requirements can the architect objectively evaluate various tools, including Cloud Logging and third-party options.",
+      "wrongOptions": "Option A: This is a premature action because it dictates a specific solution before the team's full requirements are understood.\n\nOption B: This is too passive and fails to provide the direct guidance expected of a Lead Architect.\n\nOption D: The team has already determined their current tool is insufficient; focusing only on an upgrade ignores their assessment and fails to address the root problem."
+    },
+    {
+      "id": 3,
+      "correct": [
+        "B"
+      ],
+      "question": "There is one application that has been utilizing a lot of bandwidth by sending out large packets. This particular app attempts to control the TCP window size so that it can maximize its own performance to the detriment of other services running on the same virtual machine. Which Linux tunable below would you adjust to set the maximum OS send buffer size for all connections?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "net.core.rem_max"
+        },
+        {
+          "letter": "B",
+          "text": "net.core.wmem_max"
+        },
+        {
+          "letter": "C",
+          "text": "net.ipv4.tcp_rmem"
+        },
+        {
+          "letter": "D",
+          "text": "net.ipv4.tcp_wmem"
+        }
+      ],
+      "explanation": "The parameter net.core.wmem_max is the correct choice due to its naming convention and scope. The \"net.core\" prefix indicates that the parameter applies at the kernel core level, affecting all network protocols rather than just a specific one. The \"w\" in \"wmem\" stands for \"write\" (or send) memory. The \"max\" suffix establishes the hard ceiling for that buffer. Any application attempting to request a send buffer larger than this value will be capped.",
+      "wrongOptions": "Option A: The \"rem\" refers to \"receive\" memory, not send memory — and it is not a standard Linux kernel parameter.\n\nOption C: The \"r\" in \"rmem\" refers to \"receive\" memory, not send memory. Additionally, the \"net.ipv4.tcp\" prefix applies only to TCP connections, whereas the requirement is to apply the limit to all connections.\n\nOption D: net.ipv4.tcp_wmem is also limited to TCP only (\"net.ipv4.tcp\" prefix), whereas net.core.wmem_max applies globally across all protocols."
+    },
+    {
+      "id": 4,
+      "correct": [
+        "A"
+      ],
+      "question": "A newsfeed web service has the following code running on Google App Engine. During peak load, users report that they can see news articles they have already viewed. What is the most likely cause of this problem?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The session variable is local to just a single instance."
+        },
+        {
+          "letter": "B",
+          "text": "The session variable is being overwritten in the cloud data store."
+        },
+        {
+          "letter": "C",
+          "text": "The URL of the API needs to be modified to prevent caching."
+        },
+        {
+          "letter": "D",
+          "text": "The HTTP expires header needs to be set to -1 to stop caching."
+        }
+      ],
+      "explanation": "This issue is a result of improper state management on a horizontally scaling platform. Google App Engine automatically launches new instances to handle peak loads.\n\nThe application code likely stores user session data—such as which articles have been viewed—in a global in-memory variable. Because this variable is local to each individual instance, it is not synchronized across the environment. If a user's first request is handled by Instance A, their session state is stored there. If a subsequent request is routed to a new Instance B by the load balancer, Instance B has no knowledge of the session data created on Instance A. Consequently, the user is served the same articles again.\n\nThis is a server-side logic problem rather than a client-side or CDN caching issue.",
+      "wrongOptions": "Option B: The problem description implies the state is being managed in memory, and the code is not using Cloud Datastore.\n\nOptions C and D: These are client-side or CDN caching solutions. The problem is server-side state not being shared across instances, not browser or network caching."
+    },
+    {
+      "id": 5,
+      "correct": [
+        "A"
+      ],
+      "question": "Your company has recently acquired another company operating in Spain to expand your market in Europe. You have to integrate their legacy systems into your company's systems. Your company uses GCP as the primary cloud to manage your applications. Assuming your team is taking this opportunity to modernize parts of the legacy system, what is the best way to integrate this system into your company systems?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Containerize the legacy applications using GKE and run them on the on-prem instances. Use Anthos for managing the applications."
+        },
+        {
+          "letter": "B",
+          "text": "Create a snapshot of the legacy systems and run them on compute instances on GCP."
+        },
+        {
+          "letter": "C",
+          "text": "Containerize the legacy applications using GKE and run the GKE instances on GCP."
+        },
+        {
+          "letter": "D",
+          "text": "Use a transfer appliance to securely ship the data from on-prem systems to GCP."
+        }
+      ],
+      "explanation": "The solution must satisfy two distinct mandates: \"integrate\" the legacy systems into a hybrid environment and \"modernize\" their architecture.\n\nOption A is the most comprehensive approach. Containerization fulfills the modernization requirement by making legacy applications more flexible and easier to manage. Anthos facilitates the integration by providing a unified platform to manage Kubernetes clusters across both on-premises hardware and GCP. This allows for a phased approach where applications are modernized in place before or during a full migration to the cloud.",
+      "wrongOptions": "Option B: This describes a \"lift and shift\" migration that fails to modernize the system, as the legacy system is simply run in a different location.\n\nOption C: This involves modernization, but immediate migration to GCP can be disruptive for legacy systems and lacks the unified hybrid management capabilities provided by Anthos.\n\nOption D: A Transfer Appliance is designed for data migration, not for the integration or modernization of systems."
+    },
+    {
+      "id": 6,
+      "correct": [
+        "A",
+        "D",
+        "E"
+      ],
+      "question": "The operations manager asks you for a list of recommended practices that she should consider when migrating a J2E application to the cloud. Which three practices should you recommend? (Choose three)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Port the application code to run on Google App Engine."
+        },
+        {
+          "letter": "B",
+          "text": "Integrate Cloud Dataflow into the application to capture real-time metrics."
+        },
+        {
+          "letter": "C",
+          "text": "Instrument the application with a monitoring tool like Stackdriver Debugger."
+        },
+        {
+          "letter": "D",
+          "text": "Select an automation framework to reliably provision the cloud infrastructure."
+        },
+        {
+          "letter": "E",
+          "text": "Deploy a continuous integration tool with automated testing in a staging environment."
+        },
+        {
+          "letter": "F",
+          "text": "Migrate from MySQL to a managed NoSQL database like Google Cloud Datastore or Bigtable."
+        }
+      ],
+      "explanation": "Recommended practices for migrating a complex J2E application should focus on modern principles that offer long-term value across runtime, infrastructure management, and deployment.\n\nOption A (Runtime): Porting to a Platform as a Service (PaaS) like Google App Engine is a key modernization strategy. It abstracts away the underlying infrastructure, allowing the development team to focus entirely on code rather than OS patching or scaling.\n\nOption D (Infrastructure): Implementing Infrastructure as Code (IaC) via automation frameworks like Terraform ensures that environments are created consistently and repeatably.\n\nOption E (Deployment): Establishing a CI/CD pipeline with automated testing increases release velocity and improves quality during and after the migration.",
+      "wrongOptions": "Option B: Cloud Dataflow is designed for large-scale data processing (ETL), not for application performance metrics.\n\nOption C: Cloud Debugger is a specialized tool for live debugging and is not a foundational performance monitoring practice for a migration.\n\nOption F: J2E applications often rely on relational models; a move to NoSQL requires a major re-architecture that may not be suitable for the data."
+    },
+    {
+      "id": 7,
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "question": "A startup in the decentralized finance space provides portfolio management services for customers holding digital assets. In order to manage the digital assets they take custody of their customers' private keys, which are very sensitive and prone to hacking. They plan to use the private keys of high-value assets only when required and store them offline in their on-premise systems. They use GCP as their primary infrastructure and would like to know how to access and update the private keys securely only when required. What is the best way to achieve this? (Choose three)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a VM in a separate VPC and use it to temporarily store the private keys. Create a peering connection with the main VPC to update or access the private keys."
+        },
+        {
+          "letter": "B",
+          "text": "Store the private keys on-premise and copy them to the VM through a CloudVPN."
+        },
+        {
+          "letter": "C",
+          "text": "Copy the updated private keys back to the on-prem system and delete the VM instance."
+        },
+        {
+          "letter": "D",
+          "text": "Connect the on-prem system to the main VPC through a CloudVPN."
+        }
+      ],
+      "explanation": "The goal is to establish a secure, three-step workflow to move sensitive keys from \"cold storage\" (on-premise) to a \"hot environment\" (GCP) only when absolutely necessary.\n\nStep 1 (Option A): Use isolation to reduce the attack surface. Creating a separate VPC for the sensitive VM ensures it is not exposed to the general traffic of the main VPC. VPC peering then provides a controlled, private connection if necessary.\n\nStep 2 (Option B): Secure the transit. A CloudVPN provides an encrypted tunnel between the on-premise network and the GCP VPC, ensuring private keys are not exposed during transit.\n\nStep 3 (Option C): Ensure the process is temporary and leaves no trace. After use, the keys are moved back to cold storage and the VM is destroyed, minimizing the risk exposure time.",
+      "wrongOptions": "Option D: Connecting the on-premise system directly to the main VPC increases the attack surface by exposing the cold storage to the entire application network rather than a separate, temporary environment."
+    },
+    {
+      "id": 8,
+      "correct": [
+        "A"
+      ],
+      "question": "Your company plans to migrate a multi-petabyte data set to the cloud. The data set must be available 24 hours a day. Your business analysts have experience only with a SQL interface. How should you store the data to optimize it for ease of analysis?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Load data into Google BigQuery."
+        },
+        {
+          "letter": "B",
+          "text": "Insert data into Google Cloud SQL."
+        },
+        {
+          "letter": "C",
+          "text": "Put flat files into Google Cloud Storage."
+        },
+        {
+          "letter": "D",
+          "text": "Stream data into Google Cloud Datastore."
+        }
+      ],
+      "explanation": "The requirements include handling multi-petabyte scale data, providing a SQL interface for analysts, and optimizing for analytical (OLAP) processing.\n\nBigQuery is specifically designed for this use case. It is a serverless data warehouse that scales to petabytes, uses a standard SQL dialect that matches the analysts' skills, and is built for complex analytical queries.",
+      "wrongOptions": "Option B: Cloud SQL is intended for transactional (OLTP) processing and cannot handle petabyte-scale data; its storage limits are in the tens of terabytes.\n\nOption C: Google Cloud Storage is an object store that does not offer a direct SQL interface for querying.\n\nOption D: Cloud Datastore is a NoSQL database that does not use a standard SQL interface and is intended for transactional web/mobile applications rather than large-scale analytics."
+    },
+    {
+      "id": 9,
+      "correct": [
+        "A"
+      ],
+      "question": "A development team has launched a vital application on a regional managed instance group that must have nearly zero downtime to ensure high availability. You now have to configure a global load balancer to direct HTTP traffic across multiple zones. After configuring the backend then the front end of the load balancer you click review and finalize. Assuming you have configured the load balancer correctly, what backend settings do you see upon review?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "The backend service is web app backend, the endpoint protocol is HTTP, the health check is web app load balancer check, the instance group is load balancing web app group."
+        },
+        {
+          "letter": "B",
+          "text": "The backend service is web app backend, the endpoint protocol is TCP, the health check is load balancing web app group, the instance group is web app load balancer check."
+        },
+        {
+          "letter": "C",
+          "text": "The backend service is web app backend, the endpoint protocol is HTTP, the health check is load balancing web app group, the instance group is web app load balancer check."
+        },
+        {
+          "letter": "D",
+          "text": "The backend service is web app backend, the endpoint protocol is TCP, the health check is web app load balancer check, the instance group is load balancing web app group."
+        }
+      ],
+      "explanation": "Because the load balancer is explicitly directing HTTP traffic, the protocol between the load balancer and the backend instances must be HTTP. The configuration must also follow logical naming and component structures. A backend service points to instance groups (the VMs) and uses a health check to monitor them. Option A uses logical names that match these roles correctly.",
+      "wrongOptions": "Options B and D: TCP protocol is associated with Layer 4 load balancers and is incorrect for this application-layer HTTP scenario.\n\nOption C: The names are swapped — it incorrectly identifies a health check as an instance group, and an instance group as the health check."
+    },
+    {
+      "id": 10,
+      "correct": [
+        "D"
+      ],
+      "question": "Your company has decided to make a major revision of their API in order to create better experiences for their developers. They need to keep the old version of the API available and deployable while allowing new customers and testers to try out the new API. They want to keep the same SSL and DNS records in place to serve both APIs. What should they do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Configure a new load balancer for the new version of the API."
+        },
+        {
+          "letter": "B",
+          "text": "Reconfigure old clients to use a new endpoint for the new API."
+        },
+        {
+          "letter": "C",
+          "text": "Have the old API forward traffic to the new API based on the path."
+        },
+        {
+          "letter": "D",
+          "text": "Use separate backend pools for each API path behind the load balancer."
+        }
+      ],
+      "explanation": "The requirement is to host two versions of an API concurrently using a single DNS record and SSL certificate.\n\nOption D represents the standard architectural solution: path-based routing. Using a single Google Cloud external HTTP(S) load balancer, you can configure routing rules based on the URL path. For example, traffic to /v1 is directed to the backend pool for the old API, while traffic to /v2 is routed to a different pool for the new version. This uses one IP address and one certificate to serve both versions.",
+      "wrongOptions": "Option A: A new load balancer would require a new IP and DNS record, violating the requirements.\n\nOption B: This implies forcing old clients to migrate, which contradicts the goal of keeping the old version available.\n\nOption C: This is an inefficient approach that adds latency and tightly couples the versions by making the old API act as a middleman."
+    },
+    {
+      "id": 11,
+      "correct": [
+        "C"
+      ],
+      "question": "When you use Google Cloud Code to integrate Anthos with an IDE, ______ uses your local Docker installation to manage a single Kubernetes cluster on your development machine.",
+      "options": [
+        {
+          "letter": "A",
+          "text": "OpenShift"
+        },
+        {
+          "letter": "B",
+          "text": "OpenStack"
+        },
+        {
+          "letter": "C",
+          "text": "minikube"
+        },
+        {
+          "letter": "D",
+          "text": "Skaffold"
+        }
+      ],
+      "explanation": "Google Cloud Code provides a local development environment for Kubernetes and Anthos. Minikube is the specific tool designed to set up a simple, single-node Kubernetes cluster on a developer's machine. It uses various drivers, including a local Docker installation, to provide this environment.",
+      "wrongOptions": "Option D (Skaffold): Often used alongside Google Cloud Code but performs a different role — it manages the development workflow (building and deploying images) rather than creating or managing the cluster itself.\n\nOptions A (OpenShift) and B (OpenStack): These are full-scale enterprise platforms for private clouds and are not lightweight tools for local development."
+    },
+    {
+      "id": 12,
+      "correct": [
+        "A",
+        "C"
+      ],
+      "question": "You need to reduce the number of unplanned rollbacks of erroneous production deployments in your company's web hosting platform. Improvements to the QA and test processes accomplished an 80% reduction. Which additional two approaches can you take to further reduce the rollbacks? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Introduce a blue-green deployment model."
+        },
+        {
+          "letter": "B",
+          "text": "Replace the QA environment with Canary releases."
+        },
+        {
+          "letter": "C",
+          "text": "Fragment the monolithic platform into microservices."
+        },
+        {
+          "letter": "D",
+          "text": "Reduce the platform's dependency on relational database systems."
+        },
+        {
+          "letter": "E",
+          "text": "Replace the platform's relational database systems with a NoSQL database."
+        }
+      ],
+      "explanation": "Option A (Deployment): A blue-green deployment model minimizes risk by maintaining two identical environments. You test the new version in \"green\" while \"blue\" remains live. If an error occurs after switching traffic, the rollback is nearly instantaneous by switching traffic back to the stable \"blue\" environment.\n\nOption C (Architecture): Moving from a monolith to microservices reduces the \"blast radius\" of failures. In a microservices architecture, a bug in one service only requires rolling back that specific service, rather than the entire platform.",
+      "wrongOptions": "Option B: Canary releases are a production strategy and should not replace QA testing.\n\nOptions D and E: Changing the database technology does not directly address deployment process risks."
+    },
+    {
+      "id": 13,
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "question": "A financial service provider runs their GCP infrastructure in the London region. They promise high service levels to their customers and cannot risk regional unavailability. The head of IT wants to have a disaster recovery plan for their cloud SQL instances in case the region fails or becomes unavailable. Regulation requires that they keep the data in the European region. What are the steps for a complete disaster recovery plan that will give them a near-zero recovery point objective? (Choose three)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create cross-region read replicas of the SQL instances in Belgium. If failover is required, make the cross-region read replica the primary."
+        },
+        {
+          "letter": "B",
+          "text": "Create a new standby instance in a different zone in Belgium."
+        },
+        {
+          "letter": "C",
+          "text": "Create cross-region read replicas of the SQL instances in South Carolina. If failover is required, make the cross-region read replica the primary."
+        },
+        {
+          "letter": "D",
+          "text": "Create a new cross-region replica in Frankfurt and attach it to the primary instance."
+        }
+      ],
+      "explanation": "A robust Disaster Recovery plan for a critical financial service requires regional resilience and strict data compliance within Europe.\n\nOption A: Creating cross-region read replicas in Belgium provides a failover target if the London region fails. Promoting the replica to primary during an event is the core actionable step of a DR plan.\n\nOption B: Adding a standby instance in a different zone adds High Availability (HA). While the focus is regional failure, a complete plan for a financial service includes HA as a first line of defense at the DR site.\n\nOption D: Utilizing multiple DR locations (Belgium and Frankfurt) offers the highest level of resilience.",
+      "wrongOptions": "Option C: South Carolina is in the United States. This violates Data Residency and Data Sovereignty requirements, which require keeping data in the European region. This is a frequent 'gotcha' on the PCA exam."
+    },
+    {
+      "id": 14,
+      "correct": [
+        "A",
+        "D"
+      ],
+      "question": "To reduce costs, the director of engineering has required all developers to move their development infrastructure resources from on-premises virtual machines to Google Cloud Platform. These resources go through multiple start/stop events during the day and require state to persist. You have been asked to design the process of running a development environment in Google Cloud while providing cost visibility to the finance department. Which two steps should you take? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use the no-autodelete flag on all persistent disks and stop the VM."
+        },
+        {
+          "letter": "B",
+          "text": "Use the autodelete flag on all persistent disks and terminate the VM."
+        },
+        {
+          "letter": "C",
+          "text": "Apply a VM CPU utilization label and include it in the BigQuery billing export."
+        },
+        {
+          "letter": "D",
+          "text": "Use Google BigQuery billing export and labels to associate cost to groups."
+        },
+        {
+          "letter": "E",
+          "text": "Store all state into local SSD, snapshot the persistent disks, and terminate the VM."
+        },
+        {
+          "letter": "F",
+          "text": "Store all state in Google Cloud Storage, snapshot the persistent disks, and terminate the VM."
+        }
+      ],
+      "explanation": "Option A (Persistence): Stopping a VM (rather than terminating it) is the best way to save costs on development machines. You stop paying for vCPU and RAM while retaining the persistent disk. The \"no-autodelete\" flag ensures that the disk is not lost even if the VM instance is deleted.\n\nOption D (Visibility): Exporting billing data to BigQuery and using resource labels is the standard best practice for cost visibility. Finance teams can then use SQL queries to group costs by team.",
+      "wrongOptions": "Option B: Terminating a VM with autodelete enabled destroys the state, which violates the requirement for state persistence.\n\nOption C: \"CPU utilization\" is a dynamic metric, not a static label used for billing categorization.\n\nOption E: Local SSD data is lost when a VM is stopped, and the process adds unnecessary complexity.\n\nOption F: This approach is overly complex and doesn't directly address the cost visibility requirement."
+    },
+    {
+      "id": 15,
+      "correct": [
+        "A"
+      ],
+      "question": "You have recently migrated data to the Google Cloud Platform and you are ready to connect your on-premise networks to Google Cloud. The requirements are: guaranteed network availability and high bandwidth is low; a private network connection is not required; custom routing is not required; Google Workspace access is required; and the budget to establish the connection is none. Which option fits these requirements best?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Direct Peering"
+        },
+        {
+          "letter": "B",
+          "text": "Carrier Peering"
+        },
+        {
+          "letter": "C",
+          "text": "Dedicated Interconnect"
+        },
+        {
+          "letter": "D",
+          "text": "Partner Interconnect"
+        }
+      ],
+      "explanation": "The determining factor in this scenario is the requirement for a connection with zero budget.\n\nDirect Peering (Option A) is the only free option. It connects the on-premise network to Google's public network edge. It satisfies the requirement for Google Workspace access and fits the scenario where a private network is not required.\n\nExam Tip: While Direct Peering is cost-effective, it does not provide a high availability SLA. This matches the stated requirement for low availability/bandwidth needs.",
+      "wrongOptions": "Option B (Carrier Peering): Involves paying a partner carrier, which violates the zero-budget constraint.\n\nOption C (Dedicated Interconnect): Provides private VPC connections but comes with high monthly costs.\n\nOption D (Partner Interconnect): Also a premium service with significant costs."
+    },
+    {
+      "id": 16,
+      "correct": [
+        "B"
+      ],
+      "question": "Your company wants to track whether someone is present in a meeting room reserved for a scheduled meeting. There are 1,000 meeting rooms across five offices on three continents. Each room is equipped with a motion sensor that reports its status every second. The data from the motion detector includes only a sensor ID and several different discrete items of information. Analysts will use this data together with information about account owners and office locations. Which database type should you use?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Flat file"
+        },
+        {
+          "letter": "B",
+          "text": "NoSQL"
+        },
+        {
+          "letter": "C",
+          "text": "Relational"
+        },
+        {
+          "letter": "D",
+          "text": "Blob store"
+        }
+      ],
+      "explanation": "The data in this scenario is characterized by high velocity (1,000 records per second) and a simple structure, which is typical for IoT time-series data.\n\nA NoSQL database is the best choice because it is specifically designed for high write throughput and horizontal scaling. Its flexible schema is ideal for simple sensor records, and it can handle growing data volumes without performance loss.",
+      "wrongOptions": "Option C (Relational): Would struggle with 1,000 writes per second without significant tuning, and the overhead of ACID transactions is unnecessary for this data.\n\nOption A (Flat files): Not suitable because they lack the indexing and query capabilities needed for efficient analysis.\n\nOption D (Blob store): Not suitable for real-time queries on structured sensor data."
+    },
+    {
+      "id": 17,
+      "correct": [
+        "B"
+      ],
+      "question": "A mobile gaming firm is planning to launch a multiplayer version of their flagship game. They are using Bigtable as a database and an application layer running on GKE containers. Since it is hard to predict the traffic they are planning to use ingress for load balancing to dynamically scale the application layer. They want to restrict the traffic from the web layer to the application layer only and not to the database layer. What is the easiest way to achieve this?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Create a different subnet for each layer. Use VPC network peering to allow traffic between the web layer and application layer and the application and database layer."
+        },
+        {
+          "letter": "B",
+          "text": "Create custom tags to identify the GKE containers and create firewall rules using the tags to allow the desired traffic flow."
+        },
+        {
+          "letter": "C",
+          "text": "Create custom tags to identify the GKE containers and set up routes using the tags to allow the desired traffic flow."
+        },
+        {
+          "letter": "D",
+          "text": "Create custom labels to identify the GKE containers and create firewall rules using the labels to allow the desired traffic flow."
+        }
+      ],
+      "explanation": "The easiest way to isolate tiers in GKE is to use VPC firewall rules.\n\nOption B is the correct implementation. GKE containers run on virtual machines (nodes). By applying network tags to these nodes, you can create VPC firewall rules that target those specific tags. This allows you to explicitly allow traffic from the web layer to instances tagged as \"application layer\" while blocking other paths.\n\nKey distinction: VPC firewall rules use tags or service accounts to target resources, not labels.",
+      "wrongOptions": "Option C: Routes control where traffic goes, but firewall rules are required to restrict the flow. Routes alone cannot block traffic.\n\nOption D: VPC firewall rules use network tags, not Kubernetes labels. The VPC network layer does not recognize labels for firewalling.\n\nOption A: Too complex for tier isolation within a single application. Creating separate subnets and peering connections is unnecessary overhead."
+    },
+    {
+      "id": 18,
+      "correct": [
+        "C"
+      ],
+      "question": "You set up an autoscaling instance group to serve web traffic for an upcoming launch. After configuring the instance group as a backend service to an HTTP(S) load balancer, you notice that virtual machine instances are being terminated and relaunched every minute. The instances do not have a public IP address. You have verified the appropriate web response is coming from each instance using the curl command. You want to ensure the backend is configured correctly. What should you do?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Ensure that a firewall rule exists to allow source traffic on HTTP/HTTPS to reach the load balancer."
+        },
+        {
+          "letter": "B",
+          "text": "Assign a public IP to each instance and configure a firewall rule to allow the load balancer to reach the instance public IP."
+        },
+        {
+          "letter": "C",
+          "text": "Ensure that a firewall rule exists to allow load balancer health checks to reach the instances in the instance group."
+        },
+        {
+          "letter": "D",
+          "text": "Create a tag on each instance with the name of the load balancer. Configure a firewall rule with the name of the load balancer as the source and the instance tag as the destination."
+        }
+      ],
+      "explanation": "A loop where instances are constantly terminated and relaunched is a classic sign of failed health checks. When the load balancer cannot reach an instance, it marks it unhealthy, prompting the autoscaler to replace it.\n\nThe most likely cause is the lack of a firewall rule allowing Google's health check probes. Google's health checking systems use specific, published IP ranges to send probes. To fix the issue, you must create a firewall rule that allows incoming traffic from these IP ranges to the backend instances.",
+      "wrongOptions": "Option A: Firewall rules for the load balancer's public IP are not the issue here — the problem is health check traffic reaching the backend instances.\n\nOption B: Backend instances should remain private and use private IPs for security. Public IPs are not needed.\n\nOption D: You cannot use the name of a load balancer as a source in a firewall rule; sources must be IP ranges, service accounts, or tags."
+    },
+    {
+      "id": 19,
+      "correct": [
+        "A",
+        "C"
+      ],
+      "question": "Your company hosts many applications on GCP that each store various kinds of data. The head of data compliance is concerned that if there is any PII (personally identifiable information) present in the data it might attract fines. He asked you to come up with a solution that identifies the PII, classifies it, and anonymizes it. What solution will you propose? (Choose two)",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Use Cloud DLP (Data Loss Prevention) to scan data stored in Cloud Storage, Datastore, and BigQuery and use Cloud Data Catalog to tag PII data."
+        },
+        {
+          "letter": "B",
+          "text": "Use Cloud Data Catalog to search for the PII in Cloud Storage, Datastore, and BigQuery."
+        },
+        {
+          "letter": "C",
+          "text": "Use Cloud DLP de-identification transformation templates for the data sets that are identified with PII and Cloud Dataflow to de-identify them."
+        },
+        {
+          "letter": "D",
+          "text": "Use Cloud DLP to de-identify the PII data sets and use them for processing."
+        }
+      ],
+      "explanation": "Protecting PII at scale requires a two-phase approach: discovery and anonymization.\n\nPhase 1 (Option A): Cloud DLP is the specialized tool for scanning and detecting sensitive data types across GCP. Integrating it with Cloud Data Catalog allows for the automatic tagging of data sets, creating a centralized metadata inventory.\n\nPhase 2 (Option C): For large-scale anonymization, using Cloud DLP de-identification templates combined with Cloud Dataflow is the best practice. Dataflow provides the processing power to handle large batch jobs, applying the DLP rules consistently.",
+      "wrongOptions": "Option B: Data Catalog manages metadata and cannot scan file content to find PII.\n\nOption D: The DLP API alone is not designed for the large-scale automated batch processing required; Cloud Dataflow is necessary for that level of scale."
+    },
+    {
+      "id": 20,
+      "correct": [
+        "C"
+      ],
+      "question": "You write a Python script to connect to Google BigQuery from a Google Compute Engine virtual machine. The script is printing errors that it cannot connect to BigQuery. What should you do to fix the script?",
+      "options": [
+        {
+          "letter": "A",
+          "text": "Install the latest BigQuery API client library for Python."
+        },
+        {
+          "letter": "B",
+          "text": "Run your script on a new virtual machine with the BigQuery access scope enabled."
+        },
+        {
+          "letter": "C",
+          "text": "Create a new service account with BigQuery access and execute your script with that user."
+        },
+        {
+          "letter": "D",
+          "text": "Install the BQ component for cloud with the command gcloud components install bq."
+        }
+      ],
+      "explanation": "Connection errors between a GCE instance and another GCP service are almost always caused by insufficient permissions.\n\nThe modern and most secure best practice is to use a specific service account. You create a unique service account, grant it a granular IAM role (such as \"BigQuery User\"), and attach it to the VM. The Python client library will then automatically use these credentials to authenticate.\n\nExam Tip: This solution adheres to the Principle of Least Privilege, a core GCP architectural pillar.",
+      "wrongOptions": "Option B: \"Access scopes\" are an older, less secure method of granting permissions and are not the current best practice.\n\nOption A: Unlikely to fix the issue, as connection errors point to authentication, not library installation.\n\nOption D: The bq command-line tool is separate from the Python client library and will not affect the script's authentication."
+    }
+  ]
+}
