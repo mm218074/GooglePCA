@@ -7,33 +7,59 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6;font-size:15px}
-.header{background:#1a73e8;color:#fff;padding:14px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.header h1{font-size:16px;font-weight:600}
-.q-counter{font-size:13px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px}
+.header{background:#1a73e8;color:#fff;padding:12px 18px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.header h1{font-size:15px;font-weight:600}
+.q-counter{font-size:12px;background:rgba(255,255,255,.2);padding:2px 10px;border-radius:12px;white-space:nowrap}
+.score-row{display:flex;gap:6px;margin-bottom:6px}
+.score-chip{font-size:12px;padding:2px 10px;border-radius:12px;font-weight:600}
+.s-ok{background:rgba(46,125,50,.65)}
+.s-fail{background:rgba(198,40,40,.65)}
+.s-pend{background:rgba(255,255,255,.2)}
+.reset-link{font-size:11px;color:rgba(255,255,255,.65);cursor:pointer;margin-left:auto;text-decoration:underline}
 .progress-bar{height:3px;background:rgba(255,255,255,.3);border-radius:2px}
 .progress-fill{height:3px;background:#fff;border-radius:2px;transition:width .3s}
 .sec-nav{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;background:#fff;border-bottom:1px solid #e0e0e0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .sec-nav::-webkit-scrollbar{display:none}
-.sec-pill{padding:6px 14px;border-radius:20px;border:1.5px solid #d0d0d0;font-size:13px;font-weight:500;color:#666;cursor:pointer;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0}
+.sec-pill{padding:5px 14px;border-radius:20px;border:1.5px solid #d0d0d0;font-size:12px;font-weight:500;color:#666;cursor:pointer;white-space:nowrap;background:#fff;transition:all .2s;flex-shrink:0;text-align:center;line-height:1.3}
 .sec-pill.active{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
+.pill-score{display:block;font-size:10px;color:#aaa;margin-top:1px}
+.sec-pill.active .pill-score{color:#1a73e8}
 .main{padding:14px;max-width:680px;margin:0 auto}
 .q-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.1);margin-bottom:10px}
-.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px}
 .q-num{font-size:12px;font-weight:700;color:#1a73e8;text-transform:uppercase;letter-spacing:.5px}
+.q-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .multi-badge{font-size:11px;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;padding:2px 8px;border-radius:10px;font-weight:500}
+.answered-ok{font-size:11px;background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;padding:2px 8px;border-radius:10px;font-weight:600}
+.answered-fail{font-size:11px;background:#ffebee;color:#c62828;border:1px solid #ef9a9a;padding:2px 8px;border-radius:10px;font-weight:600}
 .q-text{font-size:15px;color:#1a1a2e;line-height:1.7;margin-bottom:18px}
 .options{display:flex;flex-direction:column;gap:8px}
-.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;background:#fafafa}
-.option.correct{border-color:#2e7d32;background:#f1f8f1}
-.option.wrong{border-color:#c62828;background:#fff8f8}
-.opt-letter{width:26px;height:26px;min-width:26px;border-radius:50%;background:#e8eaf6;color:#3949ab;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
-.option.correct .opt-letter{background:#2e7d32;color:#fff}
-.option.wrong .opt-letter{background:#c62828;color:#fff}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;background:#fafafa;transition:border-color .15s,background .15s}
+.option.clickable{cursor:pointer}
+.option.clickable:active{transform:scale(.99)}
+.option.hover-sel{border-color:#90caf9;background:#f0f7ff}
+.option.selected{border-color:#1a73e8;background:#e8f0fe}
+.option.selected .opt-letter{background:#1a73e8;color:#fff}
+.option.res-correct{border-color:#2e7d32;background:#f1f8f1}
+.option.res-correct .opt-letter{background:#2e7d32;color:#fff}
+.option.res-correct .opt-text{color:#1b5e20;font-weight:500}
+.option.res-wrong{border-color:#c62828;background:#fff8f8}
+.option.res-wrong .opt-letter{background:#c62828;color:#fff}
+.option.res-wrong .opt-text{color:#7f0000}
+.option.res-missed{border-color:#2e7d32;background:#f1f8f1;opacity:.7}
+.option.res-missed .opt-letter{background:#2e7d32;color:#fff}
+.option.res-missed .opt-text{color:#2e7d32}
+.opt-letter{width:26px;height:26px;min-width:26px;border-radius:50%;background:#e8eaf6;color:#3949ab;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;transition:background .15s,color .15s}
 .opt-text{font-size:14px;color:#333;line-height:1.5}
-.option.correct .opt-text{color:#1b5e20;font-weight:500}
-.option.wrong .opt-text{color:#7f0000}
-.reveal-btn{width:100%;padding:12px;margin-top:16px;border-radius:10px;border:2px solid #1a73e8;background:#fff;color:#1a73e8;font-size:15px;font-weight:600;cursor:pointer}
+.btn-row{display:flex;gap:8px;margin-top:16px}
+.verify-btn{flex:1;padding:12px;border-radius:10px;border:none;background:#1a73e8;color:#fff;font-size:15px;font-weight:600;cursor:pointer;display:none}
+.verify-btn:disabled{opacity:.4;cursor:not-allowed;background:#90b4e8}
+.show-btn{padding:12px 16px;border-radius:10px;border:1.5px dashed #ccc;background:#fff;color:#999;font-size:13px;cursor:pointer;white-space:nowrap}
+.show-btn:hover{border-color:#1a73e8;color:#1a73e8}
+.result-banner{display:none;margin-top:14px;padding:11px 16px;border-radius:10px;font-size:15px;font-weight:700;text-align:center}
+.result-banner.ok{background:#e8f5e9;color:#2e7d32;border:1.5px solid #a5d6a7}
+.result-banner.fail{background:#ffebee;color:#c62828;border:1.5px solid #ef9a9a}
 .answer-section{display:none;margin-top:14px}
 .answer-section.visible{display:block}
 .correct-badge{display:inline-flex;align-items:center;gap:6px;background:#2e7d32;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:14px}
@@ -56,69 +82,225 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <h1>GCP Professional Cloud Architect</h1>
     <span class="q-counter" id="qCounter">— / —</span>
   </div>
+  <div class="score-row">
+    <span class="score-chip s-ok" id="scoreOk">✓ 0</span>
+    <span class="score-chip s-fail" id="scoreFail">✗ 0</span>
+    <span class="score-chip s-pend" id="scorePend">⏳ —</span>
+    <span class="reset-link" onclick="resetSection()">Reiniciar sección</span>
+  </div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 </div>
 <nav class="sec-nav" id="secNav"></nav>
 <div class="main" id="main"><div class="loading">Cargando preguntas...</div></div>
 <script>
-// Para agregar nueva seccion: añade objeto a SECTIONS y crea data/tu-archivo.json
+// Para agregar nueva sección: añade objeto a SECTIONS y crea data/tu-archivo.json
 const SECTIONS=[
-  {id:'q1-20',label:'Q 1–20',file:'data/q1-20.json'},
-  {id:'q21-40',label:'Q 21–40',file:'data/q21-40.json'},
-  {id:'q41-60',label:'Q 41–60',file:'data/q41-60.json'},
-  {id:'q61-80',label:'Q 61–80',file:'data/q61-80.json'},
-  {id:'q81-100',label:'Q 81–100',file:'data/q81-100.json'},
+  {id:'q1-20',  label:'Q 1–20',   file:'data/q1-20.json'},
+  {id:'q21-40', label:'Q 21–40',  file:'data/q21-40.json'},
+  {id:'q41-60', label:'Q 41–60',  file:'data/q41-60.json'},
+  {id:'q61-80', label:'Q 61–80',  file:'data/q61-80.json'},
+  {id:'q81-100',label:'Q 81–100', file:'data/q81-100.json'},
 ];
-let allData={},currentSection=SECTIONS[0].id,currentIndex=0;
+
+let allData={}, currentSection=SECTIONS[0].id, currentIndex=0;
+let selected=new Set();
+
+/* ── Score helpers (localStorage) ── */
+function loadScores(){try{return JSON.parse(localStorage.getItem('pca-scores')||'{}');}catch(e){return {};}}
+function saveScores(s){try{localStorage.setItem('pca-scores',JSON.stringify(s));}catch(e){}}
+function getResult(secId,qId){return (loadScores()[secId]||{})[String(qId)]||null;}
+function setResult(secId,qId,res){
+  const s=loadScores();
+  if(!s[secId])s[secId]={};
+  s[secId][String(qId)]=res;
+  saveScores(s);
+}
+function getSectionScore(secId){
+  const vals=Object.values(loadScores()[secId]||{});
+  return {correct:vals.filter(v=>v==='correct').length, wrong:vals.filter(v=>v==='wrong').length, total:vals.length};
+}
+
+/* ── Boot ── */
 async function loadAll(){
-  const results=await Promise.all(SECTIONS.map(s=>fetch(s.file).then(r=>r.json()).then(d=>({id:s.id,questions:d.questions}))));
+  const results=await Promise.all(
+    SECTIONS.map(s=>fetch(s.file).then(r=>r.json()).then(d=>({id:s.id,questions:d.questions})))
+  );
   results.forEach(r=>{allData[r.id]=r.questions;});
-  renderNav();showSection(SECTIONS[0].id);
+  renderNav(); showSection(SECTIONS[0].id);
 }
+
+/* ── Nav ── */
 function renderNav(){
-  document.getElementById('secNav').innerHTML=SECTIONS.map(s=>
-    `<button class="sec-pill${s.id===currentSection?' active':''}" onclick="showSection('${s.id}')">${s.label}</button>`
-  ).join('');
+  document.getElementById('secNav').innerHTML=SECTIONS.map(s=>{
+    const total=allData[s.id]?allData[s.id].length:20;
+    const sc=getSectionScore(s.id);
+    const label=sc.total>0?`✓${sc.correct} ✗${sc.wrong} / ${total}`:`— / ${total}`;
+    return `<button class="sec-pill${s.id===currentSection?' active':''}" onclick="showSection('${s.id}')">
+      ${s.label}<span class="pill-score">${label}</span></button>`;
+  }).join('');
 }
-function showSection(id){currentSection=id;currentIndex=0;renderNav();renderQ();}
+function showSection(id){currentSection=id;currentIndex=0;selected=new Set();renderNav();renderQ();}
+
+/* ── Header score ── */
+function updateHeader(){
+  const qs=allData[currentSection];
+  const total=qs?qs.length:0;
+  const sc=getSectionScore(currentSection);
+  document.getElementById('scoreOk').textContent=`✓ ${sc.correct}`;
+  document.getElementById('scoreFail').textContent=`✗ ${sc.wrong}`;
+  document.getElementById('scorePend').textContent=`⏳ ${total-sc.total}`;
+}
+
+/* ── Render question ── */
 function renderQ(){
-  const qs=allData[currentSection],q=qs[currentIndex],total=qs.length;
+  const qs=allData[currentSection], q=qs[currentIndex], total=qs.length;
   document.getElementById('qCounter').textContent=`Q${q.id} · ${currentIndex+1}/${total}`;
   document.getElementById('progressFill').style.width=(((currentIndex+1)/total)*100)+'%';
+  updateHeader();
+
   const isMulti=q.correct.length>1;
+  const prevResult=getResult(currentSection,q.id);
+  selected=new Set();
+
+  /* options */
+  const optsHtml=q.options.map(o=>{
+    let cls='option';
+    if(prevResult){
+      // Already answered: show correct answers in green, rest neutral
+      if(q.correct.includes(o.letter)) cls+=' res-correct';
+    } else {
+      cls+=' clickable';
+    }
+    return `<div class="${cls}" id="opt-${o.letter}" onclick="toggleOpt('${o.letter}')">
+      <div class="opt-letter">${o.letter}</div>
+      <div class="opt-text">${o.text}</div>
+    </div>`;
+  }).join('');
+
+  /* meta badges */
+  let badgeHtml='';
+  if(isMulti) badgeHtml+=`<span class="multi-badge">Elige ${q.correct.length}</span>`;
+  if(prevResult==='correct') badgeHtml+=`<span class="answered-ok">✓ Correcta</span>`;
+  else if(prevResult==='wrong') badgeHtml+=`<span class="answered-fail">✗ Incorrecta</span>`;
+
   document.getElementById('main').innerHTML=`
     <div class="q-card">
       <div class="q-meta">
         <span class="q-num">Pregunta ${q.id}</span>
-        ${isMulti?`<span class="multi-badge">Selecciona ${q.correct.length}</span>`:''}
+        <div class="q-badges">${badgeHtml}</div>
       </div>
       <div class="q-text">${q.question}</div>
-      <div class="options">${q.options.map(o=>`<div class="option" id="opt-${o.letter}"><div class="opt-letter">${o.letter}</div><div class="opt-text">${o.text}</div></div>`).join('')}</div>
-      <button class="reveal-btn" onclick="reveal()">Mostrar Respuesta</button>
+      <div class="options">${optsHtml}</div>
+      <div class="btn-row">
+        <button class="verify-btn" id="verifyBtn" onclick="verify()" disabled>Verificar</button>
+        <button class="show-btn" id="showBtn" onclick="showAnswer()">${prevResult?'Ver explicación':'Solo ver respuesta'}</button>
+      </div>
+      <div class="result-banner" id="resultBanner"></div>
       <div class="answer-section" id="ans">
         <div class="correct-badge">✓ Respuesta correcta: ${q.correct.join(', ')}</div>
         <div class="exp-block"><div class="exp-title">Análisis detallado</div><div class="exp-text">${q.explanation}</div></div>
-        <div class="why-block"><div class="why-title">Por qué las otras opciones son incorrectas</div><div class="why-text">${q.wrongOptions}</div></div>
+        ${q.wrongOptions?`<div class="why-block"><div class="why-title">Por qué las otras opciones son incorrectas</div><div class="why-text">${q.wrongOptions}</div></div>`:''}
       </div>
     </div>
     <div class="nav-row">
       <button class="nav-btn" onclick="go(-1)"${currentIndex===0?' disabled':''}>← Anterior</button>
       <button class="nav-btn next-btn" onclick="go(1)"${currentIndex===total-1?' disabled':''}>Siguiente →</button>
     </div>`;
+
+  // If already answered, reveal explanation right away
+  if(prevResult){
+    document.getElementById('ans').classList.add('visible');
+    document.getElementById('showBtn').style.display='none';
+  }
 }
-function reveal(){
+
+/* ── Option toggle ── */
+function toggleOpt(letter){
+  const q=allData[currentSection][currentIndex];
+  if(getResult(currentSection,q.id)) return; // already answered
+  const isMulti=q.correct.length>1;
+  const el=document.getElementById('opt-'+letter);
+
+  if(selected.has(letter)){
+    selected.delete(letter);
+    el.classList.remove('selected');
+  } else {
+    if(!isMulti){
+      selected.forEach(l=>document.getElementById('opt-'+l).classList.remove('selected'));
+      selected.clear();
+    }
+    selected.add(letter);
+    el.classList.add('selected');
+  }
+
+  const btn=document.getElementById('verifyBtn');
+  const ready=isMulti?(selected.size===q.correct.length):(selected.size===1);
+  btn.disabled=!ready;
+  btn.style.display='block';
+  btn.textContent=isMulti&&selected.size>0
+    ?`Verificar (${selected.size}/${q.correct.length})`
+    :'Verificar Respuesta';
+}
+
+/* ── Verify ── */
+function verify(){
+  const q=allData[currentSection][currentIndex];
+  const isCorrect=[...q.correct].every(l=>selected.has(l))&&[...selected].every(l=>q.correct.includes(l));
+
+  q.options.forEach(o=>{
+    const el=document.getElementById('opt-'+o.letter);
+    if(!el) return;
+    el.classList.remove('clickable','selected');
+    const isSel=selected.has(o.letter), isAns=q.correct.includes(o.letter);
+    if(isSel&&isAns)      el.classList.add('res-correct');  // seleccionó y es correcto
+    else if(isSel&&!isAns) el.classList.add('res-wrong');   // seleccionó pero está mal
+    else if(!isSel&&isAns) el.classList.add('res-missed');  // correcto pero no seleccionó
+  });
+
+  setResult(currentSection,q.id,isCorrect?'correct':'wrong');
+  updateHeader(); renderNav();
+
+  const banner=document.getElementById('resultBanner');
+  banner.style.display='block';
+  banner.className='result-banner '+(isCorrect?'ok':'fail');
+  banner.textContent=isCorrect?'✓ ¡Correcto!':'✗ Incorrecto — aquí está la respuesta correcta';
+
+  document.getElementById('ans').classList.add('visible');
+  document.getElementById('verifyBtn').style.display='none';
+  document.getElementById('showBtn').style.display='none';
+}
+
+/* ── Just show answer (no score) ── */
+function showAnswer(){
   const q=allData[currentSection][currentIndex];
   q.options.forEach(o=>{
-    document.getElementById('opt-'+o.letter).classList.add(q.correct.includes(o.letter)?'correct':'wrong');
+    const el=document.getElementById('opt-'+o.letter);
+    if(el){
+      el.classList.remove('clickable','selected');
+      if(q.correct.includes(o.letter)) el.classList.add('res-correct');
+    }
   });
-  document.querySelector('.reveal-btn').style.display='none';
+  document.getElementById('verifyBtn').style.display='none';
+  document.getElementById('showBtn').style.display='none';
   document.getElementById('ans').classList.add('visible');
 }
-function go(dir){
-  const n=currentIndex+dir,qs=allData[currentSection];
-  if(n>=0&&n<qs.length){currentIndex=n;renderQ();window.scrollTo(0,0);}
+
+/* ── Reset section ── */
+function resetSection(){
+  if(!confirm('¿Reiniciar el progreso de esta sección? No se puede deshacer.')) return;
+  const s=loadScores(); delete s[currentSection]; saveScores(s);
+  selected=new Set(); renderNav(); renderQ();
 }
-loadAll().catch(()=>{document.getElementById('main').innerHTML='<div class="loading">Error cargando datos. Asegúrate de servir desde un servidor HTTP (GitHub Pages).</div>';});
+
+/* ── Navigate ── */
+function go(dir){
+  const n=currentIndex+dir, qs=allData[currentSection];
+  if(n>=0&&n<qs.length){currentIndex=n;selected=new Set();renderQ();window.scrollTo(0,0);}
+}
+
+loadAll().catch(()=>{
+  document.getElementById('main').innerHTML='<div class="loading">Error cargando datos. Asegúrate de servir desde un servidor HTTP (GitHub Pages).</div>';
+});
 </script>
 </body>
 </html>
